@@ -7,6 +7,14 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model PokerRoom {
+  id       String  @id @default(cuid())
+  userId   String
+  nickname String?
+
+  user User @relation(fields: [userId], references: [id])
+}
+
 // == Next Auth ==
 
 model Account {
@@ -37,13 +45,14 @@ model Session {
 }
 
 model User {
-  id            String    @id @default(cuid())
+  id            String      @id @default(cuid())
   name          String?
-  email         String?   @unique
+  email         String?     @unique
   emailVerified DateTime?
   image         String?
   accounts      Account[]
   sessions      Session[]
+  PokerRoom     PokerRoom[]
 }
 
 model VerificationToken {
