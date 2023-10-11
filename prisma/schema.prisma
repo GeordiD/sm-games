@@ -12,7 +12,38 @@ model PokerRoom {
   userId   String
   nickname String?
 
-  user User @relation(fields: [userId], references: [id])
+  user  User    @relation(fields: [userId], references: [id])
+  Round Round[]
+}
+
+model Player {
+  id      Int     @id @default(autoincrement())
+  cuid    String  @unique @default(cuid())
+  name    String
+  isVoter Boolean @default(true)
+  isAdmin Boolean @default(false)
+  Vote    Vote[]
+}
+
+model Round {
+  id       Int     @id @default(autoincrement())
+  roomId   String
+  isActive Boolean @default(true)
+  name     String?
+
+  room PokerRoom @relation(fields: [roomId], references: [id])
+  Vote Vote[]
+}
+
+model Vote {
+  id       Int      @id @default(autoincrement())
+  roundId  Int
+  playerId Int
+  value    String
+  time     DateTime @default(now())
+
+  round  Round  @relation(fields: [roundId], references: [id])
+  player Player @relation(fields: [playerId], references: [id])
 }
 
 // == Next Auth ==
