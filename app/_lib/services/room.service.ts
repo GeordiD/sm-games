@@ -23,6 +23,18 @@ export class RoomService {
       }
     })
   }
+
+  async getRoomById(roomId: string): Promise<GetRoomsRes | null> {
+    return await db.pokerRoom.findFirst({
+      where: {
+        id: roomId,
+      },
+      select: {
+        id: true,
+        nickname: true,
+      },
+    })
+  }
 }
 
 export const _roomService = new RoomService();

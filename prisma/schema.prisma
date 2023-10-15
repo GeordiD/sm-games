@@ -26,10 +26,11 @@ model Player {
 }
 
 model Round {
-  id       Int     @id @default(autoincrement())
-  roomId   String
-  isActive Boolean @default(true)
-  name     String?
+  id         Int      @id @default(autoincrement())
+  roomId     String
+  isActive   Boolean  @default(true)
+  name       String?
+  createTime DateTime @default(now())
 
   room PokerRoom @relation(fields: [roomId], references: [id])
   Vote Vote[]

@@ -3,6 +3,13 @@ import { NoUserIdFound } from '@/app/_lib/errors/NoUserIdFound';
 import { getToken } from "next-auth/jwt"
 import { NextRequest, NextResponse } from 'next/server';
 
+export interface CreateRoomApiResponse {
+  room: {
+    id: string,
+    nickname?: string,
+  }
+}
+
 export async function POST(req: NextRequest) {
   const userId = (await getToken({ req }))?.userId;
 
@@ -12,16 +19,21 @@ export async function POST(req: NextRequest) {
     userId,
   }
 
-  try {
-    const body = await req.json();
+  let body: any;
 
-    if (body.nickname && typeof body.nickname === 'string') {
-      roomReq.nickname = body.nickname;
-    }
+  try {
+    body = await req.json();
   } catch (err) {
+    console.error(err);
     return NextResponse.json(
-      {}, { status: 400 }
+      {
+        message: 'Issue parsing nickname'
+      }, { status: 400 }
     )
+  }
+
+  if (body.nickname && typeof body.nickname === 'string') {
+    roomReq.nickname = body.nickname;
   }
 
   const newRoom = await _roomService.createRoom(roomReq);
