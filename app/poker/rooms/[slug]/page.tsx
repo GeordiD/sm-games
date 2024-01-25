@@ -14,7 +14,9 @@ async function getData(id: string) {
 }
 
 export default async function Page({ params }: { params: { slug: string } }) {
-  const data = await getData(params.slug);
+  const roomId = params.slug;
+
+  const data = await getData(roomId);
 
   // No room found
   if (!data) {

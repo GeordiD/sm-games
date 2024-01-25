@@ -1,9 +1,13 @@
-import { PokerRoom } from '@prisma/client';
+import { Player, PokerRoom } from '@prisma/client';
 import db from '@/app/_lib/db';
 
 export type CreateRoomReq = OptionalNullable<Omit<PokerRoom, 'id'>>;
 
 export type GetRoomsRes = Omit<PokerRoom, 'userId'>;
+
+export type RoomWithPlayers = ({
+  players: Player[];
+} & PokerRoom)
 
 export class RoomService {
   async createRoom(room: CreateRoomReq): Promise<PokerRoom> {
@@ -24,15 +28,14 @@ export class RoomService {
     })
   }
 
-  async getRoomById(roomId: string): Promise<GetRoomsRes | null> {
+  async getRoomById(roomId: string): Promise<RoomWithPlayers | null> {
     return await db.pokerRoom.findFirst({
       where: {
         id: roomId,
       },
-      select: {
-        id: true,
-        nickname: true,
-      },
+      include: {
+        players: true,
+      }
     })
   }
 }

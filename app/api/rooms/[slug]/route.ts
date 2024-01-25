@@ -16,11 +16,17 @@ export async function GET(
     return NotFound();
   }
 
+  const {
+    players,
+    ...pokerRoom
+  } = roomResult;
+
   const activeRound = await _roundService.getActiveRound(roomResult.id);
   const pastRounds = await _roundService.getRoundHistory(roomResult.id);
 
   return NextResponse.json({
-    room: roomResult,
+    room: pokerRoom,
+    players,
     activeRound: activeRound || null,
     history: pastRounds || [],
   })

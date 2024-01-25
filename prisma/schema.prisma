@@ -12,17 +12,21 @@ model PokerRoom {
   userId   String
   nickname String?
 
-  user  User    @relation(fields: [userId], references: [id])
-  Round Round[]
+  user    User     @relation(fields: [userId], references: [id])
+  Round   Round[]
+  players Player[]
 }
 
 model Player {
-  id      Int     @id @default(autoincrement())
-  cuid    String  @unique @default(cuid())
-  name    String
-  isVoter Boolean @default(true)
-  isAdmin Boolean @default(false)
-  Vote    Vote[]
+  id          Int     @id @default(autoincrement())
+  cuid        String  @unique @default(cuid())
+  name        String
+  pokerRoomId String?
+  isVoter     Boolean @default(true)
+  isAdmin     Boolean @default(false)
+
+  Vote      Vote[]
+  pokerRoom PokerRoom? @relation(fields: [pokerRoomId], references: [id])
 }
 
 model Round {
