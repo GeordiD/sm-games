@@ -1,3 +1,6 @@
+import { _localStorageService } from '@/app/_lib/utils/LocalStorageService';
+import JoinGame from '@/app/poker/rooms/[slug]/join/page';
+
 async function getData(id: string) {
   const response = await fetch(
     `${process.env.URL}/api/rooms/${id}`,
@@ -16,6 +19,12 @@ async function getData(id: string) {
 export default async function Page({ params }: { params: { slug: string } }) {
   const roomId = params.slug;
 
+  // can't do this because no local storage on server
+  // const playerId = _localStorageService.getPlayerIdForRoom(roomId);
+  // if (!playerId) {
+
+  // }
+
   const data = await getData(roomId);
 
   // No room found
@@ -28,10 +37,10 @@ export default async function Page({ params }: { params: { slug: string } }) {
   }
 
   return (
-    <main className="flex flex-col min-h-screen">
+    <div className="flex flex-col gap-4">
       <p>
         {JSON.stringify(data, undefined, 2)}
       </p>
-    </main>
+    </div>
   )
 }
