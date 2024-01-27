@@ -1,5 +1,8 @@
 class LocalStorageService { 
-  addPlayerToRoom(playerId: string, roomId: string) {
+  addPlayerToRoom({ playerId, roomId }: {
+    playerId: string,
+    roomId: string,
+  }) {
     const key = 'roomIdToPlayerId';
     
     const storedRoomToPlayerMap: Record<string, string> = JSON.parse(

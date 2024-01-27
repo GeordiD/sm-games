@@ -2,11 +2,13 @@
 
 import { _localStorageService } from '@/app/_lib/utils/LocalStorageService';
 import { AddPlayerApiResponse } from '@/app/api/rooms/[slug]/players/route';
-import { ChangeEvent, ChangeEventHandler, SyntheticEvent, useState } from 'react';
+import { usePathname, useRouter } from 'next/navigation';
+import { ChangeEvent, useState } from 'react';
 
-export default function JoinGame(props: {
-  roomId: string,
-}) {
+export default function Page({ params }: { params: { slug: string } }) {
+  const router = useRouter();
+  const pathname = usePathname();
+
   const [name, setName] = useState('')
 
   function handleNameChange(e: ChangeEvent<HTMLInputElement>) {
@@ -17,7 +19,7 @@ export default function JoinGame(props: {
     if (!name) return;
 
     const response = await fetch(
-      `/api/rooms/${props.roomId}/players`,
+      `/api/rooms/${params.slug}/players`,
       {
         method: 'POST',
         body: JSON.stringify({
@@ -31,12 +33,19 @@ export default function JoinGame(props: {
     if (response.status === 200) {
       const result: AddPlayerApiResponse = await response.json();
 
-      _localStorageService.addPlayerToRoom(props.roomId, result.playerId);
+      _localStorageService.addPlayerToRoom({
+        roomId: params.slug,
+        playerId: result.playerId
+      });
+
+      // navigate to the path minus join
+      router.push(pathname.split('/join')[0]);
     }
   }
 
   return (
     <div className="flex flex-col gap-4">
+      <h1>Join Game</h1>
       <div>
         <label className="form-control w-full max-w-xs">
           <div className="label">

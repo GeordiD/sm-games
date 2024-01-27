@@ -1,9 +1,12 @@
+'use client'
+
 import { _localStorageService } from '@/app/_lib/utils/LocalStorageService';
-import JoinGame from '@/app/poker/rooms/[slug]/join/page';
+import { usePathname, useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
 
 async function getData(id: string) {
   const response = await fetch(
-    `${process.env.URL}/api/rooms/${id}`,
+    `/api/rooms/${id}`,
     {
       method: 'GET'
     }
@@ -16,16 +19,36 @@ async function getData(id: string) {
   }
 }
 
-export default async function Page({ params }: { params: { slug: string } }) {
+export default function Page({ params }: { params: { slug: string } }) {
+  const router = useRouter();
+  const pathname = usePathname();
+
   const roomId = params.slug;
 
-  // can't do this because no local storage on server
-  // const playerId = _localStorageService.getPlayerIdForRoom(roomId);
-  // if (!playerId) {
+  const [data, setData] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
 
-  // }
+  useEffect(() => {
+    const playerId = _localStorageService.getPlayerIdForRoom(roomId);
+    if (!playerId) {
+      router.push(`${pathname}/join`)
+    }
 
-  const data = await getData(roomId);
+    getData(roomId)
+      .then(response => {
+        setData(response);
+        setIsLoading(false);
+      })
+  }, [roomId, router, pathname])
+
+
+  if (isLoading) {
+    return (
+      <div>
+        Loading...
+      </div>
+    )
+  }
 
   // No room found
   if (!data) {
