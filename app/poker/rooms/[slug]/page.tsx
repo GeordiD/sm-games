@@ -28,8 +28,11 @@ export default function Page({ params }: { params: { slug: string } }) {
   const [data, setData] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
 
+
   useEffect(() => {
+    console.log(window === undefined);
     const playerId = _localStorageService.getPlayerIdForRoom(roomId);
+
     if (!playerId) {
       router.push(`${pathname}/join`)
     } else {
@@ -41,13 +44,29 @@ export default function Page({ params }: { params: { slug: string } }) {
     }
   }, [roomId, router, pathname])
 
-  function handleLeaveGame() {
-    _localStorageService.removePlayerFromRoom({
-      roomId,
-      playerId: _localStorageService.getPlayerIdForRoom(roomId),
-    });
+  async function handleLeaveGame() {
+    const playerId = _localStorageService.getPlayerIdForRoom(roomId);
 
-    router.refresh();
+    const response = await fetch(
+      `/api/rooms/${params.slug}/players`,
+      {
+        method: 'DELETE',
+        body: JSON.stringify({
+          playerId,
+        })
+      }
+    )
+
+    if (response.status === 200) {
+      _localStorageService.removePlayerFromRoom({
+        roomId,
+        playerId: _localStorageService.getPlayerIdForRoom(roomId),
+      });
+
+      router.push(`${pathname}/join`)
+    } else {
+      console.error('Could not remove player from api')
+    }
   }
 
   if (isLoading) {

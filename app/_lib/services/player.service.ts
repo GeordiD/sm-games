@@ -33,6 +33,18 @@ export class PlayerService {
       }
     })
   }
+
+  async removePlayer({
+    playerId,
+  }: {
+    playerId: string,
+  }) {
+    return await db.player.delete({
+      where: {
+        cuid: playerId,
+      }
+    })
+  }
 }
 
 export const _playerService = new PlayerService();
