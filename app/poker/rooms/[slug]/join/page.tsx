@@ -3,7 +3,7 @@
 import { _localStorageService } from '@/app/_lib/utils/LocalStorageService';
 import { AddPlayerApiResponse } from '@/app/api/rooms/[slug]/players/route';
 import { usePathname, useRouter } from 'next/navigation';
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
 
 export default function Page({ params }: { params: { slug: string } }) {
   const router = useRouter();
@@ -13,6 +13,11 @@ export default function Page({ params }: { params: { slug: string } }) {
 
   function handleNameChange(e: ChangeEvent<HTMLInputElement>) {
     setName(e.currentTarget.value);
+  }
+
+  function navigateToRoom() {
+    // navigate to the path minus join
+    router.push(pathname.split('/join')[0]);
   }
 
   async function handleJoin(asParticipant: boolean) {
@@ -38,38 +43,41 @@ export default function Page({ params }: { params: { slug: string } }) {
         playerId: result.playerId
       });
 
-      // navigate to the path minus join
-      router.push(pathname.split('/join')[0]);
+      navigateToRoom();
     }
   }
 
-  return (
-    <div className="flex flex-col gap-4">
-      <h1>Join Game</h1>
-      <div>
-        <label className="form-control w-full max-w-xs">
-          <div className="label">
-            <span className="label-text">What is your name?</span>
-          </div>
-          <input
-            onChange={handleNameChange}
-            type="text"
-            placeholder="Type here"
-            className="input input-bordered w-full max-w-xs" />
-        </label>
+  if (_localStorageService.getPlayerIdForRoom(params.slug)) {
+    navigateToRoom();
+  } else {
+    return (
+      <div className="flex flex-col gap-4">
+        <h1>Join Game</h1>
+        <div>
+          <label className="form-control w-full max-w-xs">
+            <div className="label">
+              <span className="label-text">What is your name?</span>
+            </div>
+            <input
+              onChange={handleNameChange}
+              type="text"
+              placeholder="Type here"
+              className="input input-bordered w-full max-w-xs" />
+          </label>
+        </div>
+        <div className="flex gap-4">
+          <button
+            disabled={!name}
+            className="btn btn-primary"
+            onClick={() => handleJoin(true)}
+          >Join as Participant</button>
+          <button
+            disabled={!name}
+            className="btn btn-secondary"
+            onClick={() => handleJoin(false)}
+          >Join as Observer</button>
+        </div>
       </div>
-      <div className="flex gap-4">
-        <button
-          disabled={!name}
-          className="btn btn-primary"
-          onClick={() => handleJoin(true)}
-        >Join as Participant</button>
-        <button
-          disabled={!name}
-          className="btn btn-secondary"
-          onClick={() => handleJoin(false)}
-        >Join as Observer</button>
-      </div>
-    </div>
-  )
+    )
+  }
 }

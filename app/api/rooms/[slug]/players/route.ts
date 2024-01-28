@@ -2,6 +2,7 @@ import { NotFound } from '@/app/_lib/default-responses';
 import { _playerService } from '@/app/_lib/services/player.service';
 import { _roomService } from '@/app/_lib/services/room.service';
 import { RouteHandler } from '@/app/_lib/types/RouteHandler';
+import { getToken } from 'next-auth/jwt';
 import { NextRequest, NextResponse } from 'next/server';
 
 export interface AddPlayerApiResponse {
@@ -17,6 +18,8 @@ export async function POST(
     isAdmin: boolean,
     isVoter: boolean,
   } = await req.json();
+
+  const token = await getToken({ req })
 
   if (!body.name) {
     return NextResponse.json({
@@ -34,7 +37,7 @@ export async function POST(
   const player = await _playerService.addPlayer({
     name: body.name,
     roomId: roomResult.id,
-    isAdmin: !!body.isAdmin,
+    isAdmin: token?.userId === roomResult.userId,
     isVoter: !!body.isVoter,
   })
 

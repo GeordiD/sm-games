@@ -41,6 +41,14 @@ export default function Page({ params }: { params: { slug: string } }) {
     }
   }, [roomId, router, pathname])
 
+  function handleLeaveGame() {
+    _localStorageService.removePlayerFromRoom({
+      roomId,
+      playerId: _localStorageService.getPlayerIdForRoom(roomId),
+    });
+
+    router.refresh();
+  }
 
   if (isLoading) {
     return (
@@ -64,6 +72,10 @@ export default function Page({ params }: { params: { slug: string } }) {
       <p>
         {JSON.stringify(data, undefined, 2)}
       </p>
+      <button
+        className="btn btn-warning"
+        onClick={handleLeaveGame}
+      >Leave Game</button>
     </div>
   )
 }
