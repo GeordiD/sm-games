@@ -32,13 +32,13 @@ export default function Page({ params }: { params: { slug: string } }) {
     const playerId = _localStorageService.getPlayerIdForRoom(roomId);
     if (!playerId) {
       router.push(`${pathname}/join`)
+    } else {
+      getData(roomId)
+        .then(response => {
+          setData(response);
+          setIsLoading(false);
+        })
     }
-
-    getData(roomId)
-      .then(response => {
-        setData(response);
-        setIsLoading(false);
-      })
   }, [roomId, router, pathname])
 
 
