@@ -1,6 +1,8 @@
 'use client'
 
 import { _localStorageService } from '@/app/_lib/utils/LocalStorageService';
+import { GetRoomApiResponse } from '@/app/api/rooms/[slug]/route';
+import PlayerList from '@/app/poker/rooms/[slug]/player-list';
 import { usePathname, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
@@ -25,13 +27,13 @@ export default function Page({ params }: { params: { slug: string } }) {
 
   const roomId = params.slug;
 
-  const [data, setData] = useState(null);
+  const [data, setData] = useState<GetRoomApiResponse | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-
+  const [currentPlayerId, setCurrentPlayerId] = useState('');
 
   useEffect(() => {
-    console.log(window === undefined);
     const playerId = _localStorageService.getPlayerIdForRoom(roomId);
+    setCurrentPlayerId(playerId);
 
     if (!playerId) {
       router.push(`${pathname}/join`)
@@ -43,31 +45,6 @@ export default function Page({ params }: { params: { slug: string } }) {
         })
     }
   }, [roomId, router, pathname])
-
-  async function handleLeaveGame() {
-    const playerId = _localStorageService.getPlayerIdForRoom(roomId);
-
-    const response = await fetch(
-      `/api/rooms/${params.slug}/players`,
-      {
-        method: 'DELETE',
-        body: JSON.stringify({
-          playerId,
-        })
-      }
-    )
-
-    if (response.status === 200) {
-      _localStorageService.removePlayerFromRoom({
-        roomId,
-        playerId: _localStorageService.getPlayerIdForRoom(roomId),
-      });
-
-      router.push(`${pathname}/join`)
-    } else {
-      console.error('Could not remove player from api')
-    }
-  }
 
   if (isLoading) {
     return (
@@ -87,14 +64,13 @@ export default function Page({ params }: { params: { slug: string } }) {
   }
 
   return (
-    <div className="flex flex-col gap-4">
-      <p>
-        {JSON.stringify(data, undefined, 2)}
-      </p>
-      <button
-        className="btn btn-warning"
-        onClick={handleLeaveGame}
-      >Leave Game</button>
+    <div className="">
+      <PlayerList
+        className="max-w-lg"
+        currentPlayerId={currentPlayerId}
+        players={data.players}
+        roomId={roomId}
+      />
     </div>
   )
 }

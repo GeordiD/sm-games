@@ -2,7 +2,15 @@ import { NotFound } from '@/app/_lib/default-responses';
 import { _roomService } from '@/app/_lib/services/room.service';
 import { _roundService } from '@/app/_lib/services/round.service';
 import { RouteHandler } from '@/app/_lib/types/RouteHandler';
+import { Player, PokerRoom, Round } from '@prisma/client';
 import { NextRequest, NextResponse } from 'next/server';
+
+export interface GetRoomApiResponse {
+  room: PokerRoom,
+  players: Player[],
+  activeRound: Round,
+  history: Round[],
+}
 
 // Get data about current state of a room
 export async function GET(
@@ -29,5 +37,5 @@ export async function GET(
     players,
     activeRound: activeRound || null,
     history: pastRounds || [],
-  })
+  } as GetRoomApiResponse)
 }
