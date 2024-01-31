@@ -65,15 +65,14 @@ export default function Page({ params }: { params: { slug: string } }) {
   }
 
   return (
-    <div
-className="flex gap-4">
+    <div className="flex gap-4">
       <PlayerList
         className="max-w-sm w-full"
         currentPlayerId={currentPlayerId}
         players={data.players}
         roomId={roomId}
       />
-      <AdminControls />
+      <AdminControls roomId={roomId} />
     </div>
   )
 }
