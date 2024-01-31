@@ -1,5 +1,6 @@
 import { Player, PokerRoom } from '@prisma/client';
 import db from '@/app/_lib/db';
+import { OptionalNullable } from '@/app/_lib/utils/optional-nullable';
 
 export type CreateRoomReq = OptionalNullable<Omit<PokerRoom, 'id'>>;
 

@@ -13,8 +13,7 @@ class LocalStorageService {
     localStorage.setItem(this.roomIdToPlayerId, JSON.stringify(storedRoomToPlayerMap));
   }
 
-  removePlayerFromRoom({ playerId, roomId }: {
-    playerId: string,
+  removePlayerFromRoom({ roomId }: {
     roomId: string,
   }) {
     const storedRoomToPlayerMap = this.getRoomToPlayerMap();

@@ -10,13 +10,17 @@ export default function LoginForm() {
   }
 
   return (
-    <div className="flex flex-col gap-4">
-      <h3 className="self-center">Login</h3>
+    <div
+      className="flex flex-col gap-4">
+      <h3
+        className="self-center">Login
+      </h3>
       <form
         className="flex flex-col gap-2"
         onSubmit={handleSubmit(onSubmit)}
       >
-        <div className="flex gap-2">
+        <div
+          className="flex gap-2">
           <label>Email</label>
           <input
             type="email"
@@ -24,7 +28,8 @@ export default function LoginForm() {
             required
           />
         </div>
-        <div className="flex gap-2">
+        <div
+          className="flex gap-2">
           <label>Password</label>
           <input
             type="password"
@@ -32,7 +37,9 @@ export default function LoginForm() {
             required
           />
         </div>
-        <button className="border p-2 cursor-pointer">Login</button>
+        <button
+          className="border p-2 cursor-pointer">Login
+        </button>
       </form>
     </div>
   )

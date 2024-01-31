@@ -27,7 +27,6 @@ export default function LeaveGameButton(props: {
     if (response.status === 200) {
       _localStorageService.removePlayerFromRoom({
         roomId,
-        playerId: _localStorageService.getPlayerIdForRoom(roomId),
       });
 
       router.push(`${pathname}/join`)
@@ -40,6 +39,7 @@ export default function LeaveGameButton(props: {
     <button
       className="btn btn-warning"
       onClick={handleLeaveGame}
-    >Leave Game</button>
+    >Leave Game
+    </button>
   )
 }

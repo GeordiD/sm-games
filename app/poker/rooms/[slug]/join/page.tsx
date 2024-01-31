@@ -54,12 +54,17 @@ export default function Page({ params }: { params: { slug: string } }) {
   })
 
   return (
-    <div className="flex flex-col gap-4">
+    <div
+className="flex flex-col gap-4">
       <h1>Join Game</h1>
       <div>
-        <label className="form-control w-full max-w-xs">
-          <div className="label">
-            <span className="label-text">What is your name?</span>
+        <label
+className="form-control w-full max-w-xs">
+          <div
+className="label">
+            <span
+className="label-text">What is your name?
+            </span>
           </div>
           <input
             onChange={handleNameChange}
@@ -68,17 +73,20 @@ export default function Page({ params }: { params: { slug: string } }) {
             className="input input-bordered w-full max-w-xs" />
         </label>
       </div>
-      <div className="flex gap-4">
+      <div
+className="flex gap-4">
         <button
           disabled={!name}
           className="btn btn-primary"
           onClick={() => handleJoin(true)}
-        >Join as Participant</button>
+        >Join as Participant
+        </button>
         <button
           disabled={!name}
           className="btn btn-secondary"
           onClick={() => handleJoin(false)}
-        >Join as Observer</button>
+        >Join as Observer
+        </button>
       </div>
     </div>
   )

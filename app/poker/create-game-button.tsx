@@ -20,6 +20,8 @@ export default function CreateGameButton() {
   }
 
   return (
-    <button onClick={handleCreate}>Create Game</button>
+    <button
+onClick={handleCreate}>Create Game
+    </button>
   )
 }

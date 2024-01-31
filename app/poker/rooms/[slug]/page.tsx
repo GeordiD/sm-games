@@ -2,6 +2,7 @@
 
 import { _localStorageService } from '@/app/_lib/utils/LocalStorageService';
 import { GetRoomApiResponse } from '@/app/api/rooms/[slug]/route';
+import AdminControls from '@/app/poker/rooms/[slug]/admin-controls';
 import PlayerList from '@/app/poker/rooms/[slug]/player-list';
 import { usePathname, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
@@ -64,13 +65,15 @@ export default function Page({ params }: { params: { slug: string } }) {
   }
 
   return (
-    <div className="">
+    <div
+className="flex gap-4">
       <PlayerList
-        className="max-w-lg"
+        className="max-w-sm w-full"
         currentPlayerId={currentPlayerId}
         players={data.players}
         roomId={roomId}
       />
+      <AdminControls />
     </div>
   )
 }

@@ -6,7 +6,8 @@ export default async function Page() {
 
   if (session?.user?.email) {
     return (
-      <main className="flex flex-col min-h-screen">
+      <main
+className="flex flex-col min-h-screen">
         <h1>Poker</h1>
         <p>{session!.user!.name}</p>
         <CreateGameButton />

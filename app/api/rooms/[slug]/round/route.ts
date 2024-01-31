@@ -1,6 +1,5 @@
 import { NotFound } from '@/app/_lib/default-responses';
 import { NoUserIdFound } from '@/app/_lib/errors/NoUserIdFound';
-import { _playerService } from '@/app/_lib/services/player.service';
 import { _roomService } from '@/app/_lib/services/room.service';
 import { _roundService } from '@/app/_lib/services/round.service';
 import { RouteHandler } from '@/app/_lib/types/RouteHandler';

@@ -29,7 +29,8 @@ export default function PlayerList(props: {
     }) ?? [];
 
   return (
-    <div className={`${className} flex flex-col gap-4`}>
+    <div
+className={`${className} flex flex-col gap-4`}>
       {
         getPlayers().map(player =>
           <PlayerRow

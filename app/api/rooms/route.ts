@@ -15,7 +15,7 @@ export async function POST(req: NextRequest) {
 
   if (!userId) return NoUserIdFound();
 
-  let roomReq: CreateRoomReq = {
+  const roomReq: CreateRoomReq = {
     userId,
   }
 
