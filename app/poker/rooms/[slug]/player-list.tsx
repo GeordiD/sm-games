@@ -16,6 +16,7 @@ export default function PlayerList(props: {
   } = props;
 
   const getPlayers = () => players
+    .map(x => x)
     .sort((a, b) => {
       // The current player must be first
       if (a.cuid === currentPlayerId) return -1;
@@ -30,7 +31,7 @@ export default function PlayerList(props: {
 
   return (
     <div
-className={`${className} flex flex-col gap-4`}>
+      className={`${className} flex flex-col gap-4`}>
       {
         getPlayers().map(player =>
           <PlayerRow

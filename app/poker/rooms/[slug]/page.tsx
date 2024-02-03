@@ -1,35 +1,22 @@
 'use client'
 
+import { useAppDispatch, useAppSelector } from '@/app/_lib/hooks';
+import { fetchRoomData } from '@/app/_lib/store/roomSlice';
 import { _localStorageService } from '@/app/_lib/utils/LocalStorageService';
-import { GetRoomApiResponse } from '@/app/api/rooms/[slug]/route';
 import AdminControls from '@/app/poker/rooms/[slug]/admin-controls';
 import PlayerList from '@/app/poker/rooms/[slug]/player-list';
 import { usePathname, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
-async function getData(id: string) {
-  const response = await fetch(
-    `/api/rooms/${id}`,
-    {
-      method: 'GET'
-    }
-  );
-
-  if (response.status === 404) {
-    return null;
-  } else {
-    return await response.json();
-  }
-}
-
 export default function Page({ params }: { params: { slug: string } }) {
   const router = useRouter();
   const pathname = usePathname();
+  const dispatch = useAppDispatch();
 
   const roomId = params.slug;
 
-  const [data, setData] = useState<GetRoomApiResponse | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const status = useAppSelector(state => state.room.status);
+  const players = useAppSelector(state => state.room.players ?? []);
   const [currentPlayerId, setCurrentPlayerId] = useState('');
 
   useEffect(() => {
@@ -39,15 +26,12 @@ export default function Page({ params }: { params: { slug: string } }) {
     if (!playerId) {
       router.push(`${pathname}/join`)
     } else {
-      getData(roomId)
-        .then(response => {
-          setData(response);
-          setIsLoading(false);
-        })
+      if (status === 'idle')
+        dispatch(fetchRoomData(roomId))
     }
-  }, [roomId, router, pathname])
+  }, [roomId, router, pathname, dispatch, status])
 
-  if (isLoading) {
+  if (status === 'pending' || status === 'idle') {
     return (
       <div>
         Loading...
@@ -56,7 +40,7 @@ export default function Page({ params }: { params: { slug: string } }) {
   }
 
   // No room found
-  if (!data) {
+  if (status === 'failed') {
     return (
       <div>
         No room found.
@@ -69,7 +53,7 @@ export default function Page({ params }: { params: { slug: string } }) {
       <PlayerList
         className="max-w-sm w-full"
         currentPlayerId={currentPlayerId}
-        players={data.players}
+        players={players}
         roomId={roomId}
       />
       <AdminControls roomId={roomId} />

@@ -1,3 +1,4 @@
+import StoreProvider from '@/app/storeProvider'
 import './globals.css'
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
@@ -16,14 +17,16 @@ export default function RootLayout({
 }) {
   return (
     <html
-lang="en"
-data-theme="coffee">
+      lang="en"
+      data-theme="coffee">
       <body
-className={inter.className}>
-        <main
-className="flex flex-col min-h-screen bg-base-100 text-base-content p-4">
-          {children}
-        </main>
+        className={inter.className}>
+        <StoreProvider>
+          <main
+            className="flex flex-col min-h-screen bg-base-100 text-base-content p-4">
+            {children}
+          </main>
+        </StoreProvider>
       </body>
     </html>
   )
