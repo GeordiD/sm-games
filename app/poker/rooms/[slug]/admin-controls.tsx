@@ -1,21 +1,23 @@
 'use client'
 
+import { useAppDispatch, useAppSelector } from '@/app/_lib/hooks'
+import { createNewRound } from '@/app/_lib/store/roundSlice';
+
 export default function AdminControls(props: {
   className?: string,
   roomId: string,
 }) {
+  const dispatch = useAppDispatch();
+
   const {
     className = '',
     roomId,
   } = props
 
-  async function handleNextRoundClick() {
-    await fetch(
-      `/api/rooms/${roomId}/rounds`,
-      {
-        method: 'POST',
-      }
-    )
+  const nextRoundStatus = useAppSelector(state => state.round.status);
+
+  function handleNextRoundClick() {
+    dispatch(createNewRound(roomId));
   }
 
   function handleFlipCardsClick() {
@@ -32,6 +34,7 @@ export default function AdminControls(props: {
       <button
         onClick={handleNextRoundClick}
         className="btn btn-secondary"
+        disabled={nextRoundStatus !== 'idle'}
       >Next Round
       </button>
     </div>

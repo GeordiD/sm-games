@@ -1,8 +1,8 @@
+import { Status } from '@/app/_lib/utils/status';
 import { GetRoomApiResponse } from '@/app/api/rooms/[slug]/route';
 import { Player } from '@prisma/client';
 import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
-type Status = 'idle' | 'pending' | 'succeeded' | 'failed';
 
 interface RoomState {
   status: Status,
@@ -28,7 +28,6 @@ export const fetchRoomData = createAsyncThunk('room/fetchRoom', async (id: strin
     return null;
   } else {
     const result = await response.json();
-    console.log(result);
     return result;
   }
 })

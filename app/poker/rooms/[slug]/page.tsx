@@ -51,7 +51,7 @@ export default function Page({ params }: { params: { slug: string } }) {
   return (
     <div className="flex gap-4">
       <PlayerList
-        className="max-w-sm w-full"
+        className="max-w-xs w-full"
         currentPlayerId={currentPlayerId}
         players={players}
         roomId={roomId}
