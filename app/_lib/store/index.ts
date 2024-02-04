@@ -1,10 +1,12 @@
 import roomSlice from '@/app/_lib/store/roomSlice'
+import roundSlice from '@/app/_lib/store/roundSlice'
 import { configureStore } from '@reduxjs/toolkit'
 
 export const makeStore = () => {
   return configureStore({
     reducer: {
       room: roomSlice,
+      round: roundSlice,
     }
   })
 }

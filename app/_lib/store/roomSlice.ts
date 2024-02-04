@@ -1,20 +1,19 @@
 import { GetRoomApiResponse } from '@/app/api/rooms/[slug]/route';
-import { Player, Round } from '@prisma/client';
+import { Player } from '@prisma/client';
 import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
+type Status = 'idle' | 'pending' | 'succeeded' | 'failed';
+
 interface RoomState {
-  status: 'idle' | 'pending' | 'succeeded' | 'failed',
+  status: Status,
   error: string | null,
   players: Player[],
-  round?: Round,
-  history: Round[],
 }
 
 const initialState: RoomState = {
   status: 'idle',
   error: null,
   players: [],
-  history: [],
 };
 
 export const fetchRoomData = createAsyncThunk('room/fetchRoom', async (id: string) => {
@@ -45,9 +44,6 @@ const roomSlice = createSlice({
         ...state,
         status: 'succeeded',
         players: action.payload.players,
-        room: action.payload.room,
-        activeRound: action.payload.activeRound,
-        history: action.payload.history,
       };
     });
 

@@ -10,14 +10,12 @@ export default function AdminControls(props: {
   } = props
 
   async function handleNextRoundClick() {
-    const response = await fetch(
+    await fetch(
       `/api/rooms/${roomId}/rounds`,
       {
         method: 'POST',
       }
     )
-
-    console.log(await response.json());
   }
 
   function handleFlipCardsClick() {
