@@ -7,6 +7,7 @@ import AdminControls from '@/app/poker/rooms/[slug]/admin-controls';
 import PlayerList from '@/app/poker/rooms/[slug]/player-list';
 import { usePathname, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
+import { io } from 'socket.io-client';
 
 export default function Page({ params }: { params: { slug: string } }) {
   const router = useRouter();
@@ -26,8 +27,16 @@ export default function Page({ params }: { params: { slug: string } }) {
     if (!playerId) {
       router.push(`${pathname}/join`)
     } else {
-      if (status === 'idle')
-        dispatch(fetchRoomData(roomId))
+      if (status === 'idle') {
+        dispatch(fetchRoomData(roomId));
+        const socket = io(process.env.socket_server_url ?? '');
+
+        socket.emit('join', roomId);
+
+        socket.on('testMessage', (payload) => {
+          console.log('received test message: ', payload);
+        })
+      }
     }
   }, [roomId, router, pathname, dispatch, status])
 

@@ -1,3 +1,15 @@
+# Dev Notes
+
+I think we should probably start integrating websockets now. I think I need to hook up the websocket
+events to a redux action (using middleware). I should be able to just listen for actions and update state appropriately.
+
+Ex. 
+admin hits api to create a new round. response updates UI via redux on his screen
+the server also will send a websocket event to notify the clients
+That notification would get picked up by the same redux store? 
+
+# Schema Brainstorm:
+
 Room {
   id,
   userId,
