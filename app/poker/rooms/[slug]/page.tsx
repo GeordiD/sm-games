@@ -5,6 +5,7 @@ import { fetchRoomData } from '@/app/_lib/store/roomSlice';
 import { _localStorageService } from '@/app/_lib/utils/LocalStorageService';
 import AdminControls from '@/app/poker/rooms/[slug]/admin-controls';
 import PlayerList from '@/app/poker/rooms/[slug]/player-list';
+import VotingPanel from '@/app/poker/rooms/[slug]/voting-panel';
 import { usePathname, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { io } from 'socket.io-client';
@@ -65,7 +66,13 @@ export default function Page({ params }: { params: { slug: string } }) {
         players={players}
         roomId={roomId}
       />
-      <AdminControls roomId={roomId} />
+      <AdminControls
+        roomId={roomId}
+      />
+      <VotingPanel
+        roomId={roomId}
+        currentPlayerId={currentPlayerId}
+      />
     </div>
   )
 }

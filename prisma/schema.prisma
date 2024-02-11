@@ -49,6 +49,8 @@ model Vote {
 
   round  Round  @relation(fields: [roundId], references: [id])
   player Player @relation(fields: [playerId], references: [id])
+
+  @@unique([roundId, playerId])
 }
 
 // == Next Auth ==

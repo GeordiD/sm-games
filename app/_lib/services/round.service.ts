@@ -59,6 +59,29 @@ export class RoundService {
       }
     })
   }
+
+  async insertOrUpdateVote({ roundId, playerId, value }: {
+    roundId: number,
+    playerId: number,
+    value: string,
+  }) {
+    return await db.vote.upsert({
+      create: {
+        value: value,
+        playerId,
+        roundId,
+      },
+      update: {
+        value,
+      },
+      where: {
+        roundId_playerId: {
+          playerId,
+          roundId,
+        }
+      }
+    })
+  }
 }
 
 export const _roundService = new RoundService();
