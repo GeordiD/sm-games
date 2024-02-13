@@ -1,4 +1,4 @@
-import { Status } from '@/app/_lib/utils/status';
+import { Status } from '@/app/_lib/utils/Status';
 import { GetRoomApiResponse } from '@/app/api/rooms/[slug]/route';
 import { Player } from '@prisma/client';
 import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit';

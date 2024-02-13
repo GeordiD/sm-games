@@ -37,6 +37,7 @@ export default function PlayerList(props: {
           <PlayerRow
             key={player.cuid}
             name={player.name}
+            cuid={player.cuid}
           />)
       }
       <LeaveGameButton

@@ -8,6 +8,8 @@ import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 interface RoundState {
   active?: Round,
   history: Round[],
+  votes: Record<string, string>,
+
   status: Status,
   error: string | null,
 }
@@ -15,6 +17,8 @@ interface RoundState {
 const initialState: RoundState = {
   active: undefined,
   history: [],
+  votes: {},
+  
   status: 'idle',
   error: null,
 }
@@ -33,7 +37,16 @@ export const createNewRound = createAsyncThunk('round/create', async (roomId: st
 const roundSlice = createSlice({
   name: 'round',
   initialState,
-  reducers: {},
+  reducers: {
+    updateVote(state, action: PayloadAction<{
+      playerId: string,
+      value: string,
+    }>) {
+      state.votes[action.payload.playerId] = action.payload.value;
+
+      return state;
+    }
+  },
   extraReducers: (builder) => {
     // Listen to RoomSlice event for initial data
     builder.addCase(fetchRoomData.fulfilled, (state, action: PayloadAction<GetRoomApiResponse>) => {
@@ -41,6 +54,7 @@ const roundSlice = createSlice({
         ...state,
         active: action.payload.activeRound,
         history: action.payload.history,
+        votes: action.payload.votes,
       }
     })
 

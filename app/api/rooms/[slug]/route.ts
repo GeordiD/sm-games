@@ -10,6 +10,7 @@ export interface GetRoomApiResponse {
   players: Player[],
   activeRound: Round,
   history: Round[],
+  votes: Record<string, string>,
 }
 
 // Get data about current state of a room
@@ -31,11 +32,17 @@ export async function GET(
 
   const activeRound = await _roundService.getActiveRound(roomResult.id);
   const pastRounds = await _roundService.getRoundHistory(roomResult.id);
+  const votes = activeRound?.Vote
+    .reduce((acc, vote) => ({
+      ...acc,
+      [vote.player.cuid]: vote.value
+    }), {});
 
   return NextResponse.json({
     room: pokerRoom,
     players,
     activeRound: activeRound || null,
+    votes,
     history: pastRounds || [],
   } as GetRoomApiResponse)
 }

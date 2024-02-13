@@ -1,9 +1,12 @@
 'use client'
 
+import { useAppDispatch } from '@/app/_lib/hooks';
+
 export default function VotingPanel(props: {
   roomId: string,
   currentPlayerId: string,
 }) {
+  const dispatch = useAppDispatch();
 
   const votingOptions = [1, 2, 3, 5, 8];
 
@@ -18,6 +21,14 @@ export default function VotingPanel(props: {
         })
       }
     )
+
+    dispatch({
+      type: 'round/updateVote',
+      payload: {
+        value,
+        playerId: props.currentPlayerId,
+      },
+    });
   }
 
   return (

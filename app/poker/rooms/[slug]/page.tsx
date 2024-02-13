@@ -34,8 +34,11 @@ export default function Page({ params }: { params: { slug: string } }) {
 
         socket.emit('join', roomId);
 
-        socket.on('testMessage', (payload) => {
-          console.log('received test message: ', payload);
+        socket.on('vote_change', (payload) => {
+          dispatch({
+            type: 'round/updateVote',
+            payload,
+          })
         })
       }
     }

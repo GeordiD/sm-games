@@ -7,6 +7,18 @@ export class RoundService {
         roomId,
         isActive: true
       },
+      include: {
+        Vote: {
+          select: {
+            value: true,
+            player: {
+              select: {
+                cuid: true,
+              }
+            },
+          }
+        }
+      }
     })
   }
 
