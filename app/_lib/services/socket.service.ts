@@ -2,7 +2,8 @@ type Event = {
   vote_change: {
     playerId: string,
     value: string,
-  }
+  },
+  room_change: undefined,
 }
 
 type EventName = keyof Event;
@@ -18,6 +19,10 @@ export class SocketService {
       `${baseUrl}/api/v1/sockets/${roomId}`,
       {
         method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
         body: JSON.stringify({
           eventName,
           payload,

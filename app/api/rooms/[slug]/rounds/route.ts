@@ -2,6 +2,7 @@ import { NotFound } from '@/app/_lib/default-responses';
 import { NoUserIdFound } from '@/app/_lib/errors/NoUserIdFound';
 import { _roomService } from '@/app/_lib/services/room.service';
 import { _roundService } from '@/app/_lib/services/round.service';
+import { _socketService } from '@/app/_lib/services/socket.service';
 import { RouteHandler } from '@/app/_lib/types/RouteHandler';
 import { Round } from '@prisma/client';
 import { getToken } from 'next-auth/jwt';
@@ -24,6 +25,8 @@ export async function POST(req: NextRequest, { params }: RouteHandler) {
   }
 
   const newRound = await _roundService.createNextActiveRound(params.slug);
+
+  _socketService.send('room_change', roomResult.id, undefined)
 
   return NextResponse.json({
     activeRound: newRound,

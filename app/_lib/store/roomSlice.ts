@@ -8,12 +8,14 @@ interface RoomState {
   status: Status,
   error: string | null,
   players: Player[],
+  hasLoaded: boolean,
 }
 
 const initialState: RoomState = {
   status: 'idle',
   error: null,
   players: [],
+  hasLoaded: false,
 };
 
 export const fetchRoomData = createAsyncThunk('room/fetchRoom', async (id: string) => {
@@ -43,6 +45,7 @@ const roomSlice = createSlice({
         ...state,
         status: 'succeeded',
         players: action.payload.players,
+        hasLoaded: true,
       };
     });
 

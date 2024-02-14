@@ -19,6 +19,7 @@ export default function Page({ params }: { params: { slug: string } }) {
 
   const status = useAppSelector(state => state.room.status);
   const players = useAppSelector(state => state.room.players ?? []);
+  const hasLoaded = useAppSelector(state => state.room.hasLoaded);
   const [currentPlayerId, setCurrentPlayerId] = useState('');
 
   useEffect(() => {
@@ -40,11 +41,15 @@ export default function Page({ params }: { params: { slug: string } }) {
             payload,
           })
         })
+
+        socket.on('room_change', () => {
+          dispatch(fetchRoomData(roomId))
+        })
       }
     }
   }, [roomId, router, pathname, dispatch, status])
 
-  if (status === 'pending' || status === 'idle') {
+  if (!hasLoaded) {
     return (
       <div>
         Loading...
