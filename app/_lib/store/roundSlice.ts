@@ -69,6 +69,7 @@ const roundSlice = createSlice({
         status: 'idle',
         active: action.payload.activeRound,
         history,
+        votes: {},
       }
     });
 

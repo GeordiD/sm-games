@@ -1,12 +1,12 @@
 # Dev Notes
 
-I think we should probably start integrating websockets now. I think I need to hook up the websocket
-events to a redux action (using middleware). I should be able to just listen for actions and update state appropriately.
-
-Ex. 
-admin hits api to create a new round. response updates UI via redux on his screen
-the server also will send a websocket event to notify the clients
-That notification would get picked up by the same redux store? 
+TODO:
+* Client should update
+  * When player joins/leaves
+  * When round changes
+* When a player is not active/connected, show onscreen
+* Allow admin to remove a player
+* Bug: round not getting populated right on initial room creation
 
 # Schema Brainstorm:
 

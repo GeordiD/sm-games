@@ -4,7 +4,7 @@ export default function PlayerRow(props: {
   name: string,
   cuid: string,
 }) {
-  const votes = useAppSelector(state => state.round.votes);
+  const votes = useAppSelector(state => state.round.votes) ?? [];
 
   return (
     <div className="flex justify-between">
