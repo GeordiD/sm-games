@@ -65,12 +65,7 @@ export async function DELETE(
     }, { status: 400 })
   }
 
-  const [
-    room,
-  ] = await Promise.all([
-    getToken({ req }),
-    _roomService.getRoomById(params.slug)
-  ]);
+  const room = await _roomService.getRoomById(params.slug);
 
   if (!room) {
     return NotFound();
