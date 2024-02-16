@@ -20,11 +20,14 @@ export default function Page({ params }: { params: { slug: string } }) {
   const status = useAppSelector(state => state.room.status);
   const players = useAppSelector(state => state.room.players ?? []);
   const hasLoaded = useAppSelector(state => state.room.hasLoaded);
-  const [currentPlayerId, setCurrentPlayerId] = useState('');
+  const currentPlayer = useAppSelector(state => state.room.currentPlayer);
 
   useEffect(() => {
     const playerId = _localStorageService.getPlayerIdForRoom(roomId);
-    setCurrentPlayerId(playerId);
+    dispatch({
+      type: 'room/updatePlayerId',
+      payload: playerId,
+    })
 
     if (!playerId) {
       router.push(`${pathname}/join`)
@@ -70,16 +73,19 @@ export default function Page({ params }: { params: { slug: string } }) {
     <div className="flex gap-4">
       <PlayerList
         className="max-w-xs w-full"
-        currentPlayerId={currentPlayerId}
+        currentPlayerId={currentPlayer.id}
         players={players}
         roomId={roomId}
       />
-      <AdminControls
-        roomId={roomId}
-      />
+      {
+        currentPlayer.isAdmin &&
+        <AdminControls
+          roomId={roomId}
+        />
+      }
       <VotingPanel
         roomId={roomId}
-        currentPlayerId={currentPlayerId}
+        currentPlayerId={currentPlayer.id}
       />
     </div>
   )

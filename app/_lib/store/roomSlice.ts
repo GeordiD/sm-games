@@ -9,6 +9,10 @@ interface RoomState {
   error: string | null,
   players: Player[],
   hasLoaded: boolean,
+  currentPlayer: {
+    id: string,
+    isAdmin: boolean,
+  }
 }
 
 const initialState: RoomState = {
@@ -16,6 +20,10 @@ const initialState: RoomState = {
   error: null,
   players: [],
   hasLoaded: false,
+  currentPlayer: {
+    id: '',
+    isAdmin: false,
+  }
 };
 
 export const fetchRoomData = createAsyncThunk('room/fetchRoom', async (id: string) => {
@@ -38,14 +46,30 @@ const roomSlice = createSlice({
   name: 'room',
   initialState,
   reducers: {
+    updatePlayerId(state, action: PayloadAction<string>) {
+      return {
+        ...state,
+        currentPlayer: {
+          ...state.currentPlayer,
+          id: action.payload,
+        }
+      }
+    }
   },
   extraReducers: (builder) => {
     builder.addCase(fetchRoomData.fulfilled, (state, action: PayloadAction<GetRoomApiResponse>) => {
+      const isAdmin = action.payload.players.find(x => x.cuid === state.currentPlayer.id)
+        ?.isAdmin ?? false;
+
       return {
         ...state,
         status: 'succeeded',
         players: action.payload.players,
         hasLoaded: true,
+        currentPlayer: {
+          ...state.currentPlayer,
+          isAdmin,
+        }
       };
     });
 

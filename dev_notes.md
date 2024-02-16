@@ -1,8 +1,6 @@
 # Dev Notes
 
 TODO:
-* Client should update
-  * When player joins/leaves
 * When a player is not active/connected, show onscreen
 * Allow admin to remove a player
 * Bug: round not getting populated right on initial room creation
