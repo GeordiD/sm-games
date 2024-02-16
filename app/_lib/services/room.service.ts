@@ -35,7 +35,11 @@ export class RoomService {
         id: roomId,
       },
       include: {
-        players: true,
+        players: {
+          where: {
+            hasLeft: false,
+          }
+        },
       }
     })
   }

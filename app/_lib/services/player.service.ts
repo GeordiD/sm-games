@@ -39,10 +39,13 @@ export class PlayerService {
   }: {
     playerId: string,
   }) {
-    return await db.player.delete({
+    return await db.player.update({
+      data: {
+        hasLeft: true,
+      },
       where: {
         cuid: playerId,
-      }
+      },
     })
   }
 }

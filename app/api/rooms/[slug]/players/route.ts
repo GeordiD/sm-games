@@ -1,6 +1,7 @@
 import { NotFound } from '@/app/_lib/default-responses';
 import { _playerService } from '@/app/_lib/services/player.service';
 import { _roomService } from '@/app/_lib/services/room.service';
+import { _socketService } from '@/app/_lib/services/socket.service';
 import { RouteHandler } from '@/app/_lib/types/RouteHandler';
 import { getToken } from 'next-auth/jwt';
 import { NextRequest, NextResponse } from 'next/server';
@@ -42,6 +43,8 @@ export async function POST(
     isVoter: !!body.isVoter,
   })
 
+  _socketService.send('room_change', params.slug, undefined);
+
   return NextResponse.json({
     playerId: player.cuid,
   } as AddPlayerApiResponse);
@@ -82,6 +85,7 @@ export async function DELETE(
   } else {
     // remove player
     _playerService.removePlayer({ playerId: body.playerId })
+    _socketService.send('room_change', params.slug, undefined);
   }
 
   return NextResponse.json({

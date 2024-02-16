@@ -24,6 +24,7 @@ model Player {
   pokerRoomId String?
   isVoter     Boolean @default(true)
   isAdmin     Boolean @default(false)
+  hasLeft     Boolean @default(false)
 
   Vote      Vote[]
   pokerRoom PokerRoom? @relation(fields: [pokerRoomId], references: [id])
