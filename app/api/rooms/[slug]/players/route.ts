@@ -66,7 +66,6 @@ export async function DELETE(
   }
 
   const [
-    token,
     room,
   ] = await Promise.all([
     getToken({ req }),
@@ -77,7 +76,7 @@ export async function DELETE(
     return NotFound();
   }
 
-  const shouldDeleteGame = room.userId === token?.userId;
+  const shouldDeleteGame = room.userId === body.playerId;
 
   if (shouldDeleteGame) {
     // delete room

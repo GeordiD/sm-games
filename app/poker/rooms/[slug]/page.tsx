@@ -7,7 +7,7 @@ import AdminControls from '@/app/poker/rooms/[slug]/admin-controls';
 import PlayerList from '@/app/poker/rooms/[slug]/player-list';
 import VotingPanel from '@/app/poker/rooms/[slug]/voting-panel';
 import { usePathname, useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { io } from 'socket.io-client';
 
 export default function Page({ params }: { params: { slug: string } }) {
@@ -30,6 +30,13 @@ export default function Page({ params }: { params: { slug: string } }) {
     })
 
     if (!playerId) {
+      router.push(`${pathname}/join`)
+    } else if (hasLoaded && !players.find(x => x.cuid === playerId)) {
+      // The player has an id in the local storage but not in the game
+      // Navigate to join && delete the player id
+      _localStorageService.removePlayerFromRoom({
+        roomId,
+      });
       router.push(`${pathname}/join`)
     } else {
       if (status === 'idle') {

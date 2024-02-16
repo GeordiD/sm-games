@@ -12,7 +12,8 @@ interface RoomState {
   currentPlayer: {
     id: string,
     isAdmin: boolean,
-  }
+  },
+  roomId: string,
 }
 
 const initialState: RoomState = {
@@ -23,7 +24,8 @@ const initialState: RoomState = {
   currentPlayer: {
     id: '',
     isAdmin: false,
-  }
+  },
+  roomId: '',
 };
 
 export const fetchRoomData = createAsyncThunk('room/fetchRoom', async (id: string) => {
@@ -69,7 +71,8 @@ const roomSlice = createSlice({
         currentPlayer: {
           ...state.currentPlayer,
           isAdmin,
-        }
+        },
+        roomId: action.payload.room.id
       };
     });
 
