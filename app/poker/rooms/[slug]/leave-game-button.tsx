@@ -1,11 +1,10 @@
+import { useAppDispatch } from '@/app/_lib/hooks';
 import { _localStorageService } from '@/app/_lib/utils/LocalStorageService';
-import { usePathname, useRouter } from 'next/navigation';
 
 export default function LeaveGameButton(props: {
   roomId: string,
 }) {
-  const router = useRouter();
-  const pathname = usePathname();
+  const dispatch = useAppDispatch();
 
   const {
     roomId,
@@ -29,7 +28,7 @@ export default function LeaveGameButton(props: {
         roomId,
       });
 
-      router.push(`${pathname}/join`)
+      dispatch({ type: 'room/reset' });
     } else {
       console.error('Could not remove player from api')
     }

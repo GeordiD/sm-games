@@ -20,24 +20,27 @@ export default function Page({ params }: { params: { slug: string } }) {
   const status = useAppSelector(state => state.room.status);
   const players = useAppSelector(state => state.room.players ?? []);
   const hasLoaded = useAppSelector(state => state.room.hasLoaded);
-  const currentPlayer = useAppSelector(state => state.room.currentPlayer);
+  const currentPlayerId = useAppSelector(state => state.room.currentPlayerId);
+  const isAdmin = useAppSelector(state => state.room.currentPlayerIsAdmin);
 
   useEffect(() => {
     const playerId = _localStorageService.getPlayerIdForRoom(roomId);
-    dispatch({
-      type: 'room/updatePlayerId',
-      payload: playerId,
-    })
+    if (currentPlayerId !== playerId) {
+      dispatch({
+        type: 'room/updatePlayerId',
+        payload: playerId,
+      })
+    }
 
     if (!playerId) {
       router.push(`${pathname}/join`)
-    } else if (hasLoaded && !players.find(x => x.cuid === playerId)) {
+    } else if (players.length > 0 && !players.find(x => x.cuid === playerId)) {
       // The player has an id in the local storage but not in the game
       // Navigate to join && delete the player id
       _localStorageService.removePlayerFromRoom({
         roomId,
       });
-      router.push(`${pathname}/join`)
+      dispatch({ type: 'room/reset' })
     } else {
       if (status === 'idle') {
         dispatch(fetchRoomData(roomId));
@@ -57,7 +60,7 @@ export default function Page({ params }: { params: { slug: string } }) {
         })
       }
     }
-  }, [roomId, router, pathname, dispatch, status])
+  }, [roomId, router, pathname, dispatch, status, currentPlayerId, hasLoaded, players])
 
   if (!hasLoaded) {
     return (
@@ -80,19 +83,19 @@ export default function Page({ params }: { params: { slug: string } }) {
     <div className="flex gap-4">
       <PlayerList
         className="max-w-xs w-full"
-        currentPlayerId={currentPlayer.id}
+        currentPlayerId={currentPlayerId}
         players={players}
         roomId={roomId}
       />
       {
-        currentPlayer.isAdmin &&
+        isAdmin &&
         <AdminControls
           roomId={roomId}
         />
       }
       <VotingPanel
         roomId={roomId}
-        currentPlayerId={currentPlayer.id}
+        currentPlayerId={currentPlayerId}
       />
     </div>
   )

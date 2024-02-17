@@ -6,13 +6,9 @@ export default function PlayerRow(props: {
   cuid: string,
 }) {
   const votes = useAppSelector(state => state.round.votes) ?? [];
-  const currentPlayer = useAppSelector(state => state.room.currentPlayer);
+  const currentPlayerId = useAppSelector(state => state.room.currentPlayerId);
+  const currentPlayerIsAdmin = useAppSelector(state => state.room.currentPlayerIsAdmin);
   const roomId = useAppSelector(state => state.room.roomId);
-  const [isAdmin, setIsAdmin] = useState(false);
-
-  useEffect(() => {
-    setIsAdmin(currentPlayer.isAdmin);
-  }, [currentPlayer, isAdmin])
 
   async function handleRemovePlayer() {
     await fetch(
@@ -32,7 +28,7 @@ export default function PlayerRow(props: {
         {props.name}
       </div>
       {
-        isAdmin && currentPlayer.id !== props.cuid &&
+        currentPlayerIsAdmin && currentPlayerId !== props.cuid &&
         <button
           className="btn btn-ghost"
           onClick={handleRemovePlayer}>x

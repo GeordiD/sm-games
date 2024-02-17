@@ -55,15 +55,15 @@ export default function Page({ params }: { params: { slug: string } }) {
 
   return (
     <div
-className="flex flex-col gap-4">
+      className="flex flex-col gap-4">
       <h1>Join Game</h1>
       <div>
         <label
-className="form-control w-full max-w-xs">
+          className="form-control w-full max-w-xs">
           <div
-className="label">
+            className="label">
             <span
-className="label-text">What is your name?
+              className="label-text">What is your name?
             </span>
           </div>
           <input
@@ -74,7 +74,7 @@ className="label-text">What is your name?
         </label>
       </div>
       <div
-className="flex gap-4">
+        className="flex gap-4">
         <button
           disabled={!name}
           className="btn btn-primary"

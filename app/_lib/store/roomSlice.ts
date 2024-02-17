@@ -9,10 +9,8 @@ interface RoomState {
   error: string | null,
   players: Player[],
   hasLoaded: boolean,
-  currentPlayer: {
-    id: string,
-    isAdmin: boolean,
-  },
+  currentPlayerId: string,
+  currentPlayerIsAdmin: boolean,
   roomId: string,
 }
 
@@ -21,10 +19,8 @@ const initialState: RoomState = {
   error: null,
   players: [],
   hasLoaded: false,
-  currentPlayer: {
-    id: '',
-    isAdmin: false,
-  },
+  currentPlayerId: '',
+  currentPlayerIsAdmin: false,
   roomId: '',
 };
 
@@ -36,6 +32,7 @@ export const fetchRoomData = createAsyncThunk('room/fetchRoom', async (id: strin
     }
   );
 
+  
   if (response.status === 404) {
     return null;
   } else {
@@ -48,32 +45,45 @@ const roomSlice = createSlice({
   name: 'room',
   initialState,
   reducers: {
+    reset(state) {
+      return {
+        ...state,
+        status: 'idle',
+        error: null,
+        hasLoaded: false,
+        players: [],
+        currentPlayerId: '',
+        currentPlayerIsAdmin: false,
+        roomId: '',
+      }
+    },
     updatePlayerId(state, action: PayloadAction<string>) {
       return {
         ...state,
-        currentPlayer: {
-          ...state.currentPlayer,
-          id: action.payload,
-        }
+        currentPlayerId: action.payload,
       }
-    }
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(fetchRoomData.fulfilled, (state, action: PayloadAction<GetRoomApiResponse>) => {
-      const isAdmin = action.payload.players.find(x => x.cuid === state.currentPlayer.id)
+      const isAdmin = action.payload.players.find(x => x.cuid === state.currentPlayerId)
         ?.isAdmin ?? false;
 
-      return {
-        ...state,
-        status: 'succeeded',
-        players: action.payload.players,
-        hasLoaded: true,
-        currentPlayer: {
-          ...state.currentPlayer,
-          isAdmin,
-        },
-        roomId: action.payload.room.id
-      };
+      // Only update the state if there is a player id.
+      // This was added to prevent bugs when leaving/rejoining rooms. We reset the state
+      // but then a room_change is triggered and the room state is refetched causing
+      // unexpected state when logging back into the room
+      // This fixed it by denying that room state refetch because there'd be no id
+      if (state.currentPlayerId) {
+        return {
+          ...state,
+          status: 'succeeded',
+          players: action.payload.players,
+          hasLoaded: true,
+          currentPlayerIsAdmin: isAdmin,
+          roomId: action.payload.room.id
+        };
+      }
     });
 
     builder.addCase(fetchRoomData.pending, (state) => {
