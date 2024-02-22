@@ -1,8 +1,11 @@
 # Dev Notes
 
 TODO:
-* When a player is not active/connected, show onscreen
 * Bug: round not getting populated right on initial room creation
+* Flip cards button
+* Flip cards when all votes are cast
+...
+* UI Time?
 
 # Schema Brainstorm:
 
