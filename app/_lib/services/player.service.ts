@@ -1,4 +1,5 @@
 import db from '@/app/_lib/db';
+import { Prisma } from '@prisma/client';
 
 export class PlayerService {
   async getPlayer(playerCuid: string, roomId: string) {
@@ -46,6 +47,21 @@ export class PlayerService {
       where: {
         cuid: playerId,
       },
+    })
+  }
+
+  async updatePlayer({
+    playerId,
+    data,
+  }: {
+      playerId: string,
+      data: Prisma.PlayerUpdateInput
+    }) {
+    return await db.player.update({
+      data,
+      where: {
+        cuid: playerId,
+      }
     })
   }
 }

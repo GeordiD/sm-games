@@ -3,11 +3,11 @@ import { GetRoomApiResponse } from '@/app/api/rooms/[slug]/route';
 import { Player } from '@prisma/client';
 import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
-
 interface RoomState {
   status: Status,
   error: string | null,
   players: Player[],
+  connectedPlayerIds: string[],
   hasLoaded: boolean,
   currentPlayerId: string,
   currentPlayerIsAdmin: boolean,
@@ -18,6 +18,7 @@ const initialState: RoomState = {
   status: 'idle',
   error: null,
   players: [],
+  connectedPlayerIds: [],
   hasLoaded: false,
   currentPlayerId: '',
   currentPlayerIsAdmin: false,
@@ -32,7 +33,6 @@ export const fetchRoomData = createAsyncThunk('room/fetchRoom', async (id: strin
     }
   );
 
-  
   if (response.status === 404) {
     return null;
   } else {
@@ -57,6 +57,12 @@ const roomSlice = createSlice({
         roomId: '',
       }
     },
+    updateConnectedStatuses(state, action: PayloadAction<string[]>) {
+      return {
+        ...state,
+        connectedPlayerIds: [...action.payload, state.currentPlayerId],
+      }
+    },
     updatePlayerId(state, action: PayloadAction<string>) {
       return {
         ...state,
@@ -75,6 +81,8 @@ const roomSlice = createSlice({
       // unexpected state when logging back into the room
       // This fixed it by denying that room state refetch because there'd be no id
       if (state.currentPlayerId) {
+        
+
         return {
           ...state,
           status: 'succeeded',

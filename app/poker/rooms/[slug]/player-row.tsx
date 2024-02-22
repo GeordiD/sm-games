@@ -1,9 +1,9 @@
 import { useAppSelector } from '@/app/_lib/hooks'
-import { useEffect, useState } from 'react';
 
 export default function PlayerRow(props: {
   name: string,
   cuid: string,
+  isConnected?: boolean,
 }) {
   const votes = useAppSelector(state => state.round.votes) ?? [];
   const currentPlayerId = useAppSelector(state => state.room.currentPlayerId);
@@ -25,6 +25,7 @@ export default function PlayerRow(props: {
   return (
     <div className="flex items-center gap-4">
       <div className="flex-grow">
+        {props.isConnected && '*'}
         {props.name}
       </div>
       {

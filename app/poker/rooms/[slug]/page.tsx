@@ -44,14 +44,24 @@ export default function Page({ params }: { params: { slug: string } }) {
     } else {
       if (status === 'idle') {
         dispatch(fetchRoomData(roomId));
-        const socket = io(process.env.socket_server_url ?? '');
-
-        socket.emit('join', roomId);
+        const socket = io(process.env.socket_server_url ?? '', {
+          query: {
+            playerId,
+            roomId,
+          }
+        });
 
         socket.on('vote_change', (payload) => {
           dispatch({
             type: 'round/updateVote',
             payload,
+          })
+        })
+
+        socket.on('roster', (payload) => {
+          dispatch({
+            type: 'room/updateConnectedStatuses',
+            payload: payload.roster,
           })
         })
 
@@ -84,7 +94,6 @@ export default function Page({ params }: { params: { slug: string } }) {
       <PlayerList
         className="max-w-xs w-full"
         currentPlayerId={currentPlayerId}
-        players={players}
         roomId={roomId}
       />
       {

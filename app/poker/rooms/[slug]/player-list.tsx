@@ -1,19 +1,20 @@
+import { useAppSelector } from '@/app/_lib/hooks';
 import LeaveGameButton from '@/app/poker/rooms/[slug]/leave-game-button';
 import PlayerRow from '@/app/poker/rooms/[slug]/player-row';
-import { Player } from '@prisma/client';
 
 export default function PlayerList(props: {
   className?: string,
   currentPlayerId: string,
-  players: Player[],
   roomId: string,
 }) {
   const {
     className = '',
     currentPlayerId,
-    players,
     roomId,
   } = props;
+
+  const players = useAppSelector(state => state.room.players);
+  const connectedIds = useAppSelector(state => state.room.connectedPlayerIds);
 
   const getPlayers = () => players
     .map(x => x)
@@ -38,6 +39,7 @@ export default function PlayerList(props: {
             key={player.cuid}
             name={player.name}
             cuid={player.cuid}
+            isConnected={connectedIds.includes(player.cuid)}
           />)
       }
       <LeaveGameButton
