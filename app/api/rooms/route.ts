@@ -2,6 +2,7 @@ import { CreateRoomReq, _roomService } from '@/app/_lib/services/room.service';
 import { NoUserIdFound } from '@/app/_lib/errors/NoUserIdFound';
 import { getToken } from "next-auth/jwt"
 import { NextRequest, NextResponse } from 'next/server';
+import { _roundService } from '@/app/_lib/services/round.service';
 
 export interface CreateRoomApiResponse {
   room: {
@@ -37,6 +38,7 @@ export async function POST(req: NextRequest) {
   }
 
   const newRoom = await _roomService.createRoom(roomReq);
+  await _roundService.createNextActiveRound(newRoom.id);
 
   return NextResponse.json({
     room: {

@@ -22,6 +22,7 @@ export default function Page({ params }: { params: { slug: string } }) {
   const hasLoaded = useAppSelector(state => state.room.hasLoaded);
   const currentPlayerId = useAppSelector(state => state.room.currentPlayerId);
   const isAdmin = useAppSelector(state => state.room.currentPlayerIsAdmin);
+  const activeRound = useAppSelector(state => state.round.active);
 
   useEffect(() => {
     const playerId = _localStorageService.getPlayerIdForRoom(roomId);
@@ -102,10 +103,16 @@ export default function Page({ params }: { params: { slug: string } }) {
           roomId={roomId}
         />
       }
-      <VotingPanel
-        roomId={roomId}
-        currentPlayerId={currentPlayerId}
-      />
+      {
+        (
+          !!activeRound &&
+          <VotingPanel
+            roomId={roomId}
+            currentPlayerId={currentPlayerId}
+          />
+        ) ||
+        <div>No active round</div>
+      }
     </div>
   )
 }

@@ -7,7 +7,6 @@ export default function VotingPanel(props: {
   currentPlayerId: string,
 }) {
   const dispatch = useAppDispatch();
-
   const votingOptions = [1, 2, 3, 5, 8];
 
   async function handleVote(value: number) {

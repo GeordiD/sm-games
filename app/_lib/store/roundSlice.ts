@@ -1,5 +1,5 @@
 import { fetchRoomData } from '@/app/_lib/store/roomSlice';
-import { Status } from '@/app/_lib/utils/status';
+import { Status } from '@/app/_lib/utils/Status';
 import { CreateRoundApiResponse } from '@/app/api/rooms/[slug]/rounds/route';
 import { GetRoomApiResponse } from '@/app/api/rooms/[slug]/route';
 import { Round } from '@prisma/client';
