@@ -32,7 +32,7 @@ export const createNewRound = createAsyncThunk('round/create', async (roomId: st
   )
 
   return response.json();
-})
+});
 
 const roundSlice = createSlice({
   name: 'round',
@@ -45,6 +45,19 @@ const roundSlice = createSlice({
       state.votes[action.payload.playerId] = action.payload.value;
 
       return state;
+    },
+
+    updateRound(state, action: PayloadAction<{
+      isCardsFlipped?: boolean,
+    }>) {
+      console.log(!!state.active, action.payload.isCardsFlipped ?? state.active?.isCardsFlipped);
+      return {
+        ...state,
+        active: state.active ? {
+            ...state.active,
+            isCardsFlipped: action.payload.isCardsFlipped ?? state.active?.isCardsFlipped,
+          } : undefined,
+      }
     }
   },
   extraReducers: (builder) => {

@@ -24,6 +24,7 @@ export default function Page({ params }: { params: { slug: string } }) {
   const isAdmin = useAppSelector(state => state.room.currentPlayerIsAdmin);
   const activeRound = useAppSelector(state => state.round.active);
 
+  // TODO: This hook is crazy - needs to be simpler.
   useEffect(() => {
     const playerId = _localStorageService.getPlayerIdForRoom(roomId);
     if (currentPlayerId !== playerId) {
@@ -45,30 +46,43 @@ export default function Page({ params }: { params: { slug: string } }) {
     } else {
       if (status === 'idle') {
         dispatch(fetchRoomData(roomId));
-        const socket = io(process.env.socket_server_url ?? '', {
-          query: {
-            playerId,
-            roomId,
-          }
-        });
+      }
 
-        socket.on('vote_change', (payload) => {
-          dispatch({
-            type: 'round/updateVote',
-            payload,
-          })
-        })
+      const socket = io(process.env.socket_server_url ?? '', {
+        query: {
+          playerId,
+          roomId,
+        }
+      });
 
-        socket.on('roster', (payload) => {
-          dispatch({
-            type: 'room/updateConnectedStatuses',
-            payload: payload.roster,
-          })
+      socket.on('vote_change', (payload) => {
+        dispatch({
+          type: 'round/updateVote',
+          payload,
         })
+      })
 
-        socket.on('room_change', () => {
-          dispatch(fetchRoomData(roomId))
+      socket.on('round_update', (payload) => {
+        dispatch({
+          type: 'round/updateRound',
+          payload,
         })
+      })
+
+      socket.on('roster', (payload) => {
+        dispatch({
+          type: 'room/updateConnectedStatuses',
+          payload: payload.roster,
+        })
+      })
+
+      socket.on('room_change', () => {
+        dispatch(fetchRoomData(roomId))
+      })
+
+      // on unmount
+      return () => {
+        socket.disconnect();
       }
     }
   }, [roomId, router, pathname, dispatch, status, currentPlayerId, hasLoaded, players])

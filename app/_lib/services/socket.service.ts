@@ -4,6 +4,9 @@ type Event = {
     value: string,
   },
   room_change: undefined,
+  round_update: {
+    isCardsFlipped?: boolean,
+  }
 }
 
 type EventName = keyof Event;

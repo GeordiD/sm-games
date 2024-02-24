@@ -1,4 +1,5 @@
 import db from '@/app/_lib/db';
+import { Prisma } from '@prisma/client';
 
 export class RoundService {
   async getActiveRound(roomId: string) {
@@ -18,6 +19,15 @@ export class RoundService {
             },
           }
         }
+      }
+    })
+  }
+
+  async updateRound(roundId: number, update: Prisma.RoundUpdateInput) {
+    return await db.round.update({
+      data: update,
+      where: {
+        id: roundId,
       }
     })
   }

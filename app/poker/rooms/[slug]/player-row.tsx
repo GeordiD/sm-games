@@ -9,6 +9,7 @@ export default function PlayerRow(props: {
   const currentPlayerId = useAppSelector(state => state.room.currentPlayerId);
   const currentPlayerIsAdmin = useAppSelector(state => state.room.currentPlayerIsAdmin);
   const roomId = useAppSelector(state => state.room.roomId);
+  const round = useAppSelector(state => state.round.active);
 
   async function handleRemovePlayer() {
     await fetch(
@@ -20,6 +21,11 @@ export default function PlayerRow(props: {
         })
       }
     )
+  }
+
+  let voteValue = '';
+  if (votes[props.cuid]) {
+    voteValue = round?.isCardsFlipped ? votes[props.cuid] : '■';
   }
 
   return (
@@ -36,7 +42,7 @@ export default function PlayerRow(props: {
         </button>
       }
       <div>
-        {votes[props.cuid] ?? ''}
+        {voteValue ?? ''}
       </div>
     </div>
   )

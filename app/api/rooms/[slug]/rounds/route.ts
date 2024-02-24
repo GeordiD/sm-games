@@ -32,3 +32,31 @@ export async function POST(req: NextRequest, { params }: RouteHandler) {
     activeRound: newRound,
   } as CreateRoundApiResponse);
 }
+
+export async function PUT(req: NextRequest, { params }: RouteHandler) {
+  const userId = (await getToken({ req }))?.userId;
+
+  if (!userId) return NoUserIdFound();
+
+  const round = await _roundService.getActiveRound(params.slug);
+
+  // If rooom doesn't exist, return 404
+  if (!round) {
+    return NotFound();
+  }
+
+  const body: {
+    isCardsFlipped: boolean,
+  } = await req.json();
+
+  const updatedRound = await _roundService.updateRound(round.id, {
+    isCardsFlipped: body.isCardsFlipped,
+  });
+  _socketService.send('round_update', params.slug, {
+    isCardsFlipped: body.isCardsFlipped,
+  })
+
+  return NextResponse.json({
+    activeRound: updatedRound,
+  })
+}

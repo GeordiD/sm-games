@@ -1,8 +1,6 @@
 # Dev Notes
 
 TODO:
-* Bug: round not getting populated right on initial room creation
-* Flip cards button
 * Flip cards when all votes are cast
 ...
 * UI Time?
