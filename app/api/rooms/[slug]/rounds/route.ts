@@ -49,12 +49,7 @@ export async function PUT(req: NextRequest, { params }: RouteHandler) {
     isCardsFlipped: boolean,
   } = await req.json();
 
-  const updatedRound = await _roundService.updateRound(round.id, {
-    isCardsFlipped: body.isCardsFlipped,
-  });
-  _socketService.send('round_update', params.slug, {
-    isCardsFlipped: body.isCardsFlipped,
-  })
+  const updatedRound = _roundService.flipCards(params.slug, round.id, body.isCardsFlipped);
 
   return NextResponse.json({
     activeRound: updatedRound,

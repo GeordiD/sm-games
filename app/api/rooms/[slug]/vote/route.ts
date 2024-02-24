@@ -19,16 +19,13 @@ export async function POST(req: NextRequest, { params }: RouteHandler) {
     return NotFound();
   }
 
-  await _roundService.insertOrUpdateVote({
-    roundId: roundResult.id,
+  await _roundService.vote({
+    round: roundResult,
     playerId: playerResult.id,
     value: body.value,
-  })
-
-  _socketService.send('vote_change', params.slug, {
-    playerId: playerResult.cuid,
-    value: body.value,
-  })
+    playerCuid: playerResult.cuid,
+    roomId: params.slug,
+  });
 
   return NextResponse.json({});
 }

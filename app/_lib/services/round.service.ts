@@ -1,8 +1,19 @@
 import db from '@/app/_lib/db';
-import { Prisma } from '@prisma/client';
+import { _roomService } from '@/app/_lib/services/room.service';
+import { _socketService } from '@/app/_lib/services/socket.service';
+import { Prisma, Round } from '@prisma/client';
+
+export type ActiveRound = {
+  Vote: {
+    value: string,
+    player: {
+      cuid: string,
+    }
+  }[]
+} & Round;
 
 export class RoundService {
-  async getActiveRound(roomId: string) {
+  async getActiveRound(roomId: string): Promise<ActiveRound | null> {
     return await db.round.findFirst({
       where: {
         roomId,
@@ -21,6 +32,17 @@ export class RoundService {
         }
       }
     })
+  }
+
+  async flipCards(roomId: string, roundId: number, value: boolean) {
+    const updatedRound = await _roundService.updateRound(roundId, {
+      isCardsFlipped: value,
+    });
+    _socketService.send('round_update', roomId, {
+      isCardsFlipped: value,
+    });
+
+    return updatedRound;
   }
 
   async updateRound(roundId: number, update: Prisma.RoundUpdateInput) {
@@ -82,6 +104,43 @@ export class RoundService {
     })
   }
 
+  async vote({ round, playerId, playerCuid, roomId, value }: {
+    round: ActiveRound,
+    roomId: string,
+    playerId: number,
+    playerCuid: string,
+    value: string,
+  }) {
+    await this.insertOrUpdateVote({ roundId: round.id, playerId, value });
+
+    _socketService.send('vote_change', roomId, {
+      playerId: playerCuid,
+      value: value,
+    });
+
+    const playersLeftToVote = await this.getUnvotedPlayerCount(roomId, round.id);
+    if (playersLeftToVote <= 0) {
+      await this.flipCards(roomId, round.id, true);
+    }
+  }
+
+  async getUnvotedPlayerCount(roomId: string, roundId: number) {
+   return await db.player.count({
+      where: {
+        AND: {
+          pokerRoomId: roomId,
+          isVoter: true,
+          hasLeft: false,
+          Vote: {
+            none: {
+              roundId,
+            }
+          }
+        }
+      }
+    })
+  }
+
   async insertOrUpdateVote({ roundId, playerId, value }: {
     roundId: number,
     playerId: number,
@@ -102,7 +161,7 @@ export class RoundService {
           roundId,
         }
       }
-    })
+    });
   }
 }
 
