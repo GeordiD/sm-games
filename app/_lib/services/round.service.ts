@@ -1,5 +1,4 @@
 import db from '@/app/_lib/db';
-import { _roomService } from '@/app/_lib/services/room.service';
 import { _socketService } from '@/app/_lib/services/socket.service';
 import { Prisma, Round } from '@prisma/client';
 

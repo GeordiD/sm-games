@@ -1,7 +1,6 @@
 import { NotFound } from '@/app/_lib/default-responses';
 import { _playerService } from '@/app/_lib/services/player.service';
 import { _roundService } from '@/app/_lib/services/round.service';
-import { _socketService } from '@/app/_lib/services/socket.service';
 import { RouteHandler } from '@/app/_lib/types/RouteHandler';
 import { NextRequest, NextResponse } from 'next/server';
 
