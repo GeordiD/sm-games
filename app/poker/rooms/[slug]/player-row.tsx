@@ -25,7 +25,8 @@ export default function PlayerRow(props: {
 
   let voteValue = '';
   if (votes[props.cuid]) {
-    voteValue = round?.isCardsFlipped ? votes[props.cuid] : '■';
+    voteValue = round?.isCardsFlipped || props.cuid === currentPlayerId
+      ? votes[props.cuid] : '■';
   }
 
   return (
