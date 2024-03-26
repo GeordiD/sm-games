@@ -1,8 +1,5 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  env: {
-    socket_server_url: 'http://localhost:4000/',
-  },
   redirects: async () => ([
     {
       source: '/',

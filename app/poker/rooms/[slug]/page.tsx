@@ -48,7 +48,7 @@ export default function Page({ params }: { params: { slug: string } }) {
         dispatch(fetchRoomData(roomId));
       }
 
-      const socket = io(process.env.socket_server_url ?? '', {
+      const socket = io(process.env.NEXT_PUBLIC_BE_URL ?? '', {
         query: {
           playerId,
           roomId,
