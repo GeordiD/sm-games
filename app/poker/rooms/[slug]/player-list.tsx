@@ -1,16 +1,13 @@
 import { useAppSelector } from '@/app/_lib/hooks';
-import LeaveGameButton from '@/app/poker/rooms/[slug]/leave-game-button';
 import PlayerRow from '@/app/poker/rooms/[slug]/player-row';
 
 export default function PlayerList(props: {
   className?: string,
   currentPlayerId: string,
-  roomId: string,
 }) {
   const {
     className = '',
     currentPlayerId,
-    roomId,
   } = props;
 
   const players = useAppSelector(state => state.room.players);
@@ -32,7 +29,7 @@ export default function PlayerList(props: {
 
   return (
     <div
-      className={`${className} flex flex-col gap-4`}>
+      className={`${className} flex flex-col gap-4 bg-base-300 p-4 rounded-md`}>
       {
         getPlayers().map(player =>
           <PlayerRow
@@ -42,9 +39,6 @@ export default function PlayerList(props: {
             isConnected={connectedIds.includes(player.cuid)}
           />)
       }
-      <LeaveGameButton
-        roomId={roomId}
-      />
     </div>
   )
 }

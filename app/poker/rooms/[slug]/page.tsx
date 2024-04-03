@@ -9,6 +9,7 @@ import VotingPanel from '@/app/poker/rooms/[slug]/voting-panel';
 import { usePathname, useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 import { io } from 'socket.io-client';
+import NavBar from '@/app/poker/rooms/[slug]/nav-bar';
 
 export default function Page({ params }: { params: { slug: string } }) {
   const router = useRouter();
@@ -105,28 +106,34 @@ export default function Page({ params }: { params: { slug: string } }) {
   }
 
   return (
-    <div className="flex gap-4">
-      <PlayerList
-        className="max-w-xs w-full"
-        currentPlayerId={currentPlayerId}
+    <div className="flex flex-col gap-4">
+      <NavBar
         roomId={roomId}
+        roomName="Proton Refinement"
       />
-      {
-        isAdmin &&
-        <AdminControls
-          roomId={roomId}
+      <div className="flex gap-4">
+        <PlayerList
+          className="max-w-xs w-full h-fit"
+          currentPlayerId={currentPlayerId}
         />
-      }
-      {
-        (
-          !!activeRound &&
-          <VotingPanel
+        {
+          isAdmin &&
+          <AdminControls
             roomId={roomId}
-            currentPlayerId={currentPlayerId}
           />
-        ) ||
-        <div>No active round</div>
-      }
+        }
+        {
+          (
+            !!activeRound &&
+            <VotingPanel
+              roomId={roomId}
+              currentPlayerId={currentPlayerId}
+            />
+          ) ||
+          <div>No active round</div>
+        }
+      </div>
     </div>
+
   )
 }
