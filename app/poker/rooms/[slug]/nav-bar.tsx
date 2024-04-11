@@ -1,6 +1,8 @@
 import OptionsSvg from '@/app/_imgs/three-dot.svg';
+import FakeLogo from '@/app/_imgs/fake-logo.svg';
 import { useAppDispatch } from '@/app/_lib/hooks';
 import { _localStorageService } from '@/app/_lib/utils/LocalStorageService';
+import ThemePicker from '@/app/poker/rooms/[slug]/theme-picker';
 
 export default function NavBar(props: {
   roomName: string,
@@ -38,9 +40,15 @@ export default function NavBar(props: {
   }
 
   return (
-    <div className="navbar bg-base-300 rounded-md">
-      <div className="flex-1">
-        <a className="btn btn-ghost text-xl">{roomName}</a>
+    <div className="navbar bg-base-300 px-4">
+      <div className="flex-none">
+        <FakeLogo />
+      </div>
+      <div className="flex-1 font-semibold justify-center">
+        {roomName}
+      </div>
+      <div className="flex-none">
+        <ThemePicker />
       </div>
       <div className="flex-none">
         <div className="dropdown dropdown-end dropdown-hover">
@@ -48,7 +56,7 @@ export default function NavBar(props: {
             tabIndex={0}
             role="button"
             className="btn btn-square btn-ghost">
-            <OptionsSvg className="w-8 h-8" />
+            <OptionsSvg className="w-8 h-8 text-white" />
           </div>
           <ul
             tabIndex={0}

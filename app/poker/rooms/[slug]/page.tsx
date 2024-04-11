@@ -106,12 +106,12 @@ export default function Page({ params }: { params: { slug: string } }) {
   }
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col">
       <NavBar
         roomId={roomId}
         roomName="Proton Refinement"
       />
-      <div className="flex gap-4">
+      <div className="flex gap-4 p-4">
         <PlayerList
           className="max-w-xs w-full h-fit"
           currentPlayerId={currentPlayerId}
