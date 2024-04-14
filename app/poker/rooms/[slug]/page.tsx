@@ -111,17 +111,7 @@ export default function Page({ params }: { params: { slug: string } }) {
         roomId={roomId}
         roomName="Proton Refinement"
       />
-      <div className="flex gap-4 p-4">
-        <PlayerList
-          className="max-w-xs w-full h-fit"
-          currentPlayerId={currentPlayerId}
-        />
-        {
-          isAdmin &&
-          <AdminControls
-            roomId={roomId}
-          />
-        }
+      <div className="flex gap-8 p-4 justify-center w-full">
         {
           (
             !!activeRound &&
@@ -132,6 +122,23 @@ export default function Page({ params }: { params: { slug: string } }) {
           ) ||
           <div>No active round</div>
         }
+        <div className="min-w-64">
+          <PlayerList
+            className="max-w-xs w-full h-fit"
+            currentPlayerId={currentPlayerId}
+          />
+        </div>
+
+        <div>
+
+          {/* {
+            isAdmin &&
+            <AdminControls
+              roomId={roomId}
+            />
+          } */}
+        </div>
+
       </div>
     </div>
 
