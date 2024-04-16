@@ -40,6 +40,7 @@ export default function PlayerList(props: {
   const editButton = (
     <button
       className="btn btn-square btn-sm btn-ghost"
+      key="editButton"
       onClick={handleEditToggle}>
       <EditIcon />
     </button>
@@ -47,6 +48,7 @@ export default function PlayerList(props: {
 
   const stopEditingButton = (
     <button
+      key="stopEditButton"
       className="btn btn-square btn-sm btn-success"
       onClick={handleEditToggle}>
       <CheckIcon />
