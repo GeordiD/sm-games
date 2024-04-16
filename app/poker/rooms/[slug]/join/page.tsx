@@ -81,12 +81,12 @@ export default function Page({ params }: { params: { slug: string } }) {
           onClick={() => handleJoin(true)}
         >Join as Participant
         </button>
-        <button
+        {/* <button
           disabled={!name}
           className="btn btn-secondary"
           onClick={() => handleJoin(false)}
         >Join as Observer
-        </button>
+        </button> */}
       </div>
     </div>
   )

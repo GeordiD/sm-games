@@ -3,12 +3,12 @@
 import { useAppDispatch, useAppSelector } from '@/app/_lib/hooks';
 import { fetchRoomData } from '@/app/_lib/store/roomSlice';
 import { _localStorageService } from '@/app/_lib/utils/LocalStorageService';
-import AdminControls from '@/app/poker/rooms/[slug]/admin-controls';
 import PlayerList from '@/app/poker/rooms/[slug]/player-list';
-import VotingPanel from '@/app/poker/rooms/[slug]/voting-panel';
+import MainPanel from '@/app/poker/rooms/[slug]/main-panel';
 import { usePathname, useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 import { io } from 'socket.io-client';
+import NavBar from '@/app/poker/rooms/[slug]/nav-bar';
 
 export default function Page({ params }: { params: { slug: string } }) {
   const router = useRouter();
@@ -21,8 +21,6 @@ export default function Page({ params }: { params: { slug: string } }) {
   const players = useAppSelector(state => state.room.players ?? []);
   const hasLoaded = useAppSelector(state => state.room.hasLoaded);
   const currentPlayerId = useAppSelector(state => state.room.currentPlayerId);
-  const isAdmin = useAppSelector(state => state.room.currentPlayerIsAdmin);
-  const activeRound = useAppSelector(state => state.round.active);
 
   // TODO: This hook is crazy - needs to be simpler.
   useEffect(() => {
@@ -105,28 +103,24 @@ export default function Page({ params }: { params: { slug: string } }) {
   }
 
   return (
-    <div className="flex gap-4">
-      <PlayerList
-        className="max-w-xs w-full"
-        currentPlayerId={currentPlayerId}
+    <div className="flex flex-col">
+      <NavBar
         roomId={roomId}
+        roomName="Proton Refinement"
       />
-      {
-        isAdmin &&
-        <AdminControls
+      <div className="flex gap-8 p-4 justify-center w-full">
+        <MainPanel
           roomId={roomId}
+          currentPlayerId={currentPlayerId}
         />
-      }
-      {
-        (
-          !!activeRound &&
-          <VotingPanel
-            roomId={roomId}
+        <div className="min-w-64">
+          <PlayerList
+            className="max-w-xs w-full h-fit"
             currentPlayerId={currentPlayerId}
           />
-        ) ||
-        <div>No active round</div>
-      }
+        </div>
+      </div>
     </div>
+
   )
 }
