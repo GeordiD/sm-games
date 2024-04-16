@@ -2,9 +2,8 @@ import EyeIcon from '@/app/_imgs/eye.svg';
 
 export default function ThemePicker() {
   return (
-    <div className="dropdown dropdown-end">
+    <div className="dropdown dropdown-end dropdown-hover">
       <div
-        tabIndex={0}
         role="button"
         className="btn btn-square btn-ghost">
         <EyeIcon />
@@ -17,7 +16,6 @@ export default function ThemePicker() {
         </svg> */}
       </div>
       <ul
-        tabIndex={0}
         className="dropdown-content z-[1] p-2 shadow-2xl bg-base-300 rounded-box w-36">
         <li><input
           type="radio"
