@@ -18,6 +18,9 @@ export default function AdminControls(props: {
 
   const nextRoundStatus = useAppSelector(state => state.round.status);
   const activeRound = useAppSelector(state => state.round.active);
+  const votes = useAppSelector(state => state.round.votes);
+
+  const someoneHasVoted = Object.keys(votes).length > 0;
 
   function handleNextRoundClick() {
     dispatch(createNewRound(roomId));
@@ -35,12 +38,12 @@ export default function AdminControls(props: {
   return (
     <div className={`${className} flex gap-4`}>
       <div
-        className="tooltip"
+        className="tooltip ml-4"
         data-tip="Flip Cards">
         <button
           onClick={handleFlipCardsClick}
           className="btn btn-square btn-ghost btn-sm"
-          disabled={activeRound?.isCardsFlipped}
+          disabled={activeRound?.isCardsFlipped || !someoneHasVoted}
         >
           <FlipIcon />
         </button>

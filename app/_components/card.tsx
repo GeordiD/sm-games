@@ -12,7 +12,7 @@ export default function Card(props: {
     <div
       className={`${props.className} bg-base-200 rounded-md`}
     >
-      <div className="flex items-center justify-between bg-base-300 rounded-t-md p-4 font-semibold">
+      <div className="flex items-center justify-between bg-base-300 rounded-t-md p-4 font-semibold gap-4">
         {...derivedHeaderArray}
       </div>
       <div className="p-4">
