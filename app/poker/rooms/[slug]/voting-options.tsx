@@ -1,4 +1,5 @@
 import { useAppDispatch, useAppSelector } from '@/app/_lib/hooks';
+import { useState } from 'react';
 
 export default function VotingOptions(props: {
   currentPlayerId: string,
@@ -13,7 +14,11 @@ export default function VotingOptions(props: {
     return votes[id];
   })
 
+  const [localCurrentVote, setLocalCurrentVote] = useState<string | number | undefined>(undefined)
+
   async function handleVote(value: number) {
+    setLocalCurrentVote(value);
+
     await fetch(
       `/api/rooms/${props.roomId}/vote`,
       {
@@ -36,7 +41,7 @@ export default function VotingOptions(props: {
 
   function getButtonColor(value: string | number) {
     // using double equal so '1' == 1
-    return value == currentVote
+    return value == (localCurrentVote ?? currentVote)
       ? 'btn-accent'
       : 'btn-primary'
   }
