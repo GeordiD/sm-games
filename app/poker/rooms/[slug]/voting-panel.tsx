@@ -2,6 +2,7 @@
 
 import Card from '@/app/_components/card';
 import { useAppDispatch, useAppSelector } from '@/app/_lib/hooks';
+import AdminControls from '@/app/poker/rooms/[slug]/admin-controls';
 
 export default function VotingPanel(props: {
   roomId: string,
@@ -9,6 +10,8 @@ export default function VotingPanel(props: {
 }) {
   const dispatch = useAppDispatch();
   const votingOptions = [1, 2, 3, 5, 8];
+
+  const isAdmin = useAppSelector(state => state.room.currentPlayerIsAdmin);
 
   const currentVote = useAppSelector(state => {
     const votes = state.round.votes;
@@ -43,9 +46,19 @@ export default function VotingPanel(props: {
       : 'btn-primary'
   }
 
+  const header = [
+    (<p key="header">Vote</p>)
+  ]
+
+  if (isAdmin) header.push((
+    <AdminControls
+      roomId={props.roomId}
+    />
+  ));
+
   return (
     <Card
-      header={(<p key="header">Vote</p>)}
+      header={header}
     >
       <div className="flex gap-4 flex-wrap justify-center content-start">
         {

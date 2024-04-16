@@ -2,6 +2,8 @@
 
 import { useAppDispatch, useAppSelector } from '@/app/_lib/hooks'
 import { createNewRound } from '@/app/_lib/store/roundSlice';
+import FlipIcon from '@/app/_imgs/rotate-ccw.svg';
+import NextIcon from '@/app/_imgs/arrow-right.svg';
 
 export default function AdminControls(props: {
   className?: string,
@@ -31,19 +33,29 @@ export default function AdminControls(props: {
   }
 
   return (
-    <div className={`${className} flex flex-col gap-4`}>
-      <button
-        onClick={handleFlipCardsClick}
-        className="btn btn-secondary"
-        disabled={activeRound?.isCardsFlipped}
-      >Flip Cards
-      </button>
-      <button
-        onClick={handleNextRoundClick}
-        className="btn btn-secondary"
-        disabled={nextRoundStatus !== 'idle'}
-      >Next Round
-      </button>
+    <div className={`${className} flex gap-4`}>
+      <div
+        className="tooltip"
+        data-tip="Flip Cards">
+        <button
+          onClick={handleFlipCardsClick}
+          className="btn btn-square btn-ghost"
+          disabled={activeRound?.isCardsFlipped}
+        >
+          <FlipIcon />
+        </button>
+      </div>
+      <div
+        className="tooltip"
+        data-tip="Next Round">
+        <button
+          onClick={handleNextRoundClick}
+          className="btn btn-square btn-ghost"
+          disabled={nextRoundStatus !== 'idle' || !activeRound?.isCardsFlipped}
+        >
+          <NextIcon />
+        </button>
+      </div>
     </div>
   )
 }
