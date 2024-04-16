@@ -1,9 +1,11 @@
 import { useAppSelector } from '@/app/_lib/hooks'
+import CloseIcon from '@/app/_imgs/x.svg';
 
 export default function PlayerRow(props: {
   name: string,
   cuid: string,
   isConnected?: boolean,
+  showDeleteButton: boolean,
 }) {
   const votes = useAppSelector(state => state.round.votes) ?? [];
   const currentPlayerId = useAppSelector(state => state.room.currentPlayerId);
@@ -29,20 +31,25 @@ export default function PlayerRow(props: {
       ? votes[props.cuid] : '■';
   }
 
+  const shouldShowDeleteControls = currentPlayerIsAdmin
+    && currentPlayerId !== props.cuid
+    && props.showDeleteButton;
+
   return (
-    <div className="flex items-center gap-4">
-      <div className="flex-grow">
-        {props.isConnected && '*'}
-        {props.name}
-      </div>
+    <div className="flex items-center gap-4 h-8">
       {
-        currentPlayerIsAdmin && currentPlayerId !== props.cuid &&
+        shouldShowDeleteControls &&
         <button
-          className="btn btn-ghost"
-          onClick={handleRemovePlayer}>x
+          className="btn btn-error btn-square btn-sm"
+          onClick={handleRemovePlayer}
+        >
+          <CloseIcon />
         </button>
       }
-      <div>
+      <div className={`flex-grow ${props.isConnected ? '' : 'text-base-context-disabled'}`}>
+        {props.name}
+      </div>
+      <div className="">
         {voteValue ?? ''}
       </div>
     </div>

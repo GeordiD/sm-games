@@ -2,14 +2,14 @@
 
 import { useAppDispatch, useAppSelector } from '@/app/_lib/hooks'
 import { createNewRound } from '@/app/_lib/store/roundSlice';
-import { useRouter } from 'next/navigation';
+import FlipIcon from '@/app/_imgs/rotate-ccw.svg';
+import NextIcon from '@/app/_imgs/arrow-right.svg';
 
 export default function AdminControls(props: {
   className?: string,
   roomId: string,
 }) {
   const dispatch = useAppDispatch();
-  const router = useRouter();
 
   const {
     className = '',
@@ -18,6 +18,9 @@ export default function AdminControls(props: {
 
   const nextRoundStatus = useAppSelector(state => state.round.status);
   const activeRound = useAppSelector(state => state.round.active);
+  const votes = useAppSelector(state => state.round.votes);
+
+  const someoneHasVoted = Object.keys(votes).length > 0;
 
   function handleNextRoundClick() {
     dispatch(createNewRound(roomId));
@@ -32,29 +35,30 @@ export default function AdminControls(props: {
     });
   }
 
-  function handleBack() {
-    router.push('/poker');
-  }
-
   return (
-    <div className={`${className} flex flex-col gap-4`}>
-      <button
-        onClick={handleFlipCardsClick}
-        className="btn btn-secondary"
-        disabled={activeRound?.isCardsFlipped}
-      >Flip Cards
-      </button>
-      <button
-        onClick={handleNextRoundClick}
-        className="btn btn-secondary"
-        disabled={nextRoundStatus !== 'idle'}
-      >Next Round
-      </button>
-      <button
-        onClick={handleBack}
-        className="btn btn-secondary"
-      >Back
-      </button>
+    <div className={`${className} flex gap-4`}>
+      <div
+        className="tooltip ml-4"
+        data-tip="Flip Cards">
+        <button
+          onClick={handleFlipCardsClick}
+          className="btn btn-square btn-ghost btn-sm"
+          disabled={activeRound?.isCardsFlipped || !someoneHasVoted}
+        >
+          <FlipIcon />
+        </button>
+      </div>
+      <div
+        className="tooltip"
+        data-tip="Next Round">
+        <button
+          onClick={handleNextRoundClick}
+          className="btn btn-square btn-ghost btn-sm"
+          disabled={nextRoundStatus !== 'idle' || !activeRound?.isCardsFlipped}
+        >
+          <NextIcon />
+        </button>
+      </div>
     </div>
   )
 }

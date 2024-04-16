@@ -23,7 +23,7 @@ export default function RootLayout({
         className={inter.className}>
         <StoreProvider>
           <main
-            className="flex flex-col min-h-screen bg-base-100 text-base-content p-4">
+            className="flex flex-col min-h-screen bg-base-100 text-base-content">
             {children}
           </main>
         </StoreProvider>
