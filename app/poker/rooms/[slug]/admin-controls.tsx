@@ -39,7 +39,7 @@ export default function AdminControls(props: {
         data-tip="Flip Cards">
         <button
           onClick={handleFlipCardsClick}
-          className="btn btn-square btn-ghost"
+          className="btn btn-square btn-ghost btn-sm"
           disabled={activeRound?.isCardsFlipped}
         >
           <FlipIcon />
@@ -50,7 +50,7 @@ export default function AdminControls(props: {
         data-tip="Next Round">
         <button
           onClick={handleNextRoundClick}
-          className="btn btn-square btn-ghost"
+          className="btn btn-square btn-ghost btn-sm"
           disabled={nextRoundStatus !== 'idle' || !activeRound?.isCardsFlipped}
         >
           <NextIcon />

@@ -41,7 +41,8 @@ export default function VotingPanel(props: {
   }
 
   function getButtonColor(value: string | number) {
-    return value === currentVote
+    // using double equal so '1' == 1
+    return value == currentVote
       ? 'btn-accent'
       : 'btn-primary'
   }
@@ -52,9 +53,12 @@ export default function VotingPanel(props: {
 
   if (isAdmin) header.push((
     <AdminControls
+      key="adminControls"
       roomId={props.roomId}
     />
   ));
+
+  console.log(currentVote);
 
   return (
     <Card
