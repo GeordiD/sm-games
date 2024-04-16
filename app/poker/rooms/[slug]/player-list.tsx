@@ -3,6 +3,7 @@ import PlayerRow from '@/app/poker/rooms/[slug]/player-row';
 import EditIcon from '@/app/_imgs/pen.svg';
 import CheckIcon from '@/app/_imgs/check.svg';
 import { useState } from 'react';
+import Card from '@/app/_components/card';
 
 export default function PlayerList(props: {
   className?: string,
@@ -52,16 +53,18 @@ export default function PlayerList(props: {
     </button>
   )
 
+  const header = [
+    (<p key="headerTitle">Players</p>),
+    isInEditMode ? stopEditingButton : editButton,
+  ]
+
   return (
-    <div
-      className={`${className} bg-base-200 rounded-md`}
+    <Card
+      className={className}
+      header={header}
     >
-      <div className="flex items-center justify-between bg-base-300 rounded-t-md p-4 font-semibold">
-        <p>Players</p>
-        {isInEditMode ? stopEditingButton : editButton}
-      </div>
       <div
-        className="flex flex-col gap-4 p-4">
+        className="flex flex-col gap-4">
         {
           getPlayers().map(player =>
             <PlayerRow
@@ -73,6 +76,6 @@ export default function PlayerList(props: {
             />)
         }
       </div>
-    </div>
+    </Card>
   )
 }

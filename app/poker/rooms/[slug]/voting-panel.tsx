@@ -1,5 +1,6 @@
 'use client'
 
+import Card from '@/app/_components/card';
 import { useAppDispatch } from '@/app/_lib/hooks';
 
 export default function VotingPanel(props: {
@@ -31,18 +32,23 @@ export default function VotingPanel(props: {
   }
 
   return (
-    <div className="flex gap-4 flex-wrap justify-center content-start">
-      {
-        votingOptions.map(option =>
-          <button
-            className="btn btn-square btn-secondary w-16 h-16 my-0"
-            key={option}
-            onClick={() => handleVote(option)}
-          >
-            {option}
-          </button>
-        )
-      }
-    </div>
+    <Card
+      header={(<p>Vote</p>)}
+    >
+      <div className="flex gap-4 flex-wrap justify-center content-start">
+        {
+          votingOptions.map(option =>
+            <button
+              className="btn btn-square btn-primary w-16 h-16 my-0"
+              key={option}
+              onClick={() => handleVote(option)}
+            >
+              {option}
+            </button>
+          )
+        }
+      </div>
+    </Card>
+
   )
 }
