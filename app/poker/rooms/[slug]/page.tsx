@@ -4,7 +4,7 @@ import { useAppDispatch, useAppSelector } from '@/app/_lib/hooks';
 import { fetchRoomData } from '@/app/_lib/store/roomSlice';
 import { _localStorageService } from '@/app/_lib/utils/LocalStorageService';
 import PlayerList from '@/app/poker/rooms/[slug]/player-list';
-import VotingPanel from '@/app/poker/rooms/[slug]/voting-panel';
+import MainPanel from '@/app/poker/rooms/[slug]/main-panel';
 import { usePathname, useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 import { io } from 'socket.io-client';
@@ -109,7 +109,7 @@ export default function Page({ params }: { params: { slug: string } }) {
         roomName="Proton Refinement"
       />
       <div className="flex gap-8 p-4 justify-center w-full">
-        <VotingPanel
+        <MainPanel
           roomId={roomId}
           currentPlayerId={currentPlayerId}
         />
