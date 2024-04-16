@@ -2,14 +2,12 @@
 
 import { useAppDispatch, useAppSelector } from '@/app/_lib/hooks'
 import { createNewRound } from '@/app/_lib/store/roundSlice';
-import { useRouter } from 'next/navigation';
 
 export default function AdminControls(props: {
   className?: string,
   roomId: string,
 }) {
   const dispatch = useAppDispatch();
-  const router = useRouter();
 
   const {
     className = '',
@@ -32,10 +30,6 @@ export default function AdminControls(props: {
     });
   }
 
-  function handleBack() {
-    router.push('/poker');
-  }
-
   return (
     <div className={`${className} flex flex-col gap-4`}>
       <button
@@ -49,11 +43,6 @@ export default function AdminControls(props: {
         className="btn btn-secondary"
         disabled={nextRoundStatus !== 'idle'}
       >Next Round
-      </button>
-      <button
-        onClick={handleBack}
-        className="btn btn-secondary"
-      >Back
       </button>
     </div>
   )

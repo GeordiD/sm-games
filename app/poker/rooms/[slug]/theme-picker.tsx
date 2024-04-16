@@ -6,7 +6,7 @@ export default function ThemePicker() {
       <div
         tabIndex={0}
         role="button"
-        className="btn btn-square btn-sm btn-ghost">
+        className="btn btn-square btn-ghost">
         <EyeIcon />
         {/* <svg
           width="12px"

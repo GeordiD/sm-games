@@ -1,14 +1,19 @@
 import OptionsSvg from '@/app/_imgs/three-dot.svg';
 import FakeLogo from '@/app/_imgs/fake-logo.svg';
-import { useAppDispatch } from '@/app/_lib/hooks';
+import { useAppDispatch, useAppSelector } from '@/app/_lib/hooks';
 import { _localStorageService } from '@/app/_lib/utils/LocalStorageService';
 import ThemePicker from '@/app/poker/rooms/[slug]/theme-picker';
+import { useRouter } from 'next/navigation';
+import ArrowLeft from '@/app/_imgs/arrow-left.svg';
 
 export default function NavBar(props: {
   roomName: string,
   roomId: string,
 }) {
   const dispatch = useAppDispatch();
+  const router = useRouter();
+
+  const isAdmin = useAppSelector(state => state.room.currentPlayerIsAdmin);
 
   const {
     roomId,
@@ -40,7 +45,16 @@ export default function NavBar(props: {
   }
 
   return (
-    <div className="navbar bg-base-300 px-4">
+    <div className="navbar bg-base-300 px-4 gap-2">
+      {
+        isAdmin &&
+        <button
+          className="flex-none btn btn-ghost btn-square"
+          onClick={() => { router.push('/poker') }}
+        >
+          <ArrowLeft />
+        </button>
+      }
       <div className="flex-none">
         <FakeLogo />
       </div>

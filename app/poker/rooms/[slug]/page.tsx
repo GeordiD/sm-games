@@ -131,12 +131,12 @@ export default function Page({ params }: { params: { slug: string } }) {
 
         <div>
 
-          {/* {
+          {
             isAdmin &&
             <AdminControls
               roomId={roomId}
             />
-          } */}
+          }
         </div>
 
       </div>
